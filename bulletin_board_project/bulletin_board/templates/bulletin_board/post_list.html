@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulletin Board - Post List</title>
+</head>
+<body>
+    <h1>Post List</h1>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.title }}</li>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+            {% if post.video %}
+                <video width="320" height="240" controls>
+                    <source src="{{ post.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% endif %}
+            <p>{{ post.content }}</p>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_post' %}">Create a new post</a>
+</body>
+</html>
