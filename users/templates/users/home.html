@@ -2,7 +2,12 @@
 {% block title %} Home Page {% endblock title%}
 {% block content %}
     <div class="jumbotron">
-        <h1 class="display-4">Welcome, {{user.first_name.title|default:'Guest'}}</h1>
+        {% if user.is_authenticated %}
+            <h1 class="display-4">Welcome, {{user.profile.nick_name|default:user.first_name}}</h1>
+        {% else %}
+            <h1 class="display-4">Welcome, Guest</h1>
+        {% endif %}
+
         <p class="lead">
             Welcome to <b>Easy buddy</b> make your travel plans easier
         </p>
