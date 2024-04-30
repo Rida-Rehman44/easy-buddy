@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='container'>
+    <h1>List of Music Artists and Bands</H1>
+
+        <UL>
+
+            {% for artist in all_artist%}
+                <li>{{artist}}</li>
+            {% endfor %}
+
+        </ul>
+    
+        <ul id="artistList">
+            <li>Taylor Swift.</li>
+            <li>Ariana grande </li>
+            <li>Miley Cyrus</li>
+            <li>Billie Eilis</li>
+            <li>Natalia Lafourcade</li>
+            <li>Rosalía</li>
+            <li>Karol G</li>
+            <li>Anitta</li>
+            
+            <!-- More artists can be added here -->
+          </ul>
+          
+          <input type="text" id="newArtist" placeholder="Add new artist...">
+          <button onclick="addArtist()">Add</button>
+          
+          <script>
+            // JavaScript function to add a new artist to the list
+            function addArtist() {
+              var artistName = document.getElementById('newArtist').value;
+              if (artistName) {
+                var list = document.getElementById('artistList');
+                var newElement = document.createElement('li');
+                newElement.textContent = artistName;
+                list.appendChild(newElement);
+                document.getElementById('newArtist').value = ''; // Clear the text field
+              } else {
+                alert('Please enter the name of an artist or band.');
+              }
+            }
+          </script>
+
+
+
+
+{% endblock %}
+
+

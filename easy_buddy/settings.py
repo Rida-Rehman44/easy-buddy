@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
-    'event_schedule',
+    'schedule.apps.ScheduleConfig',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +153,8 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+
+
+
+

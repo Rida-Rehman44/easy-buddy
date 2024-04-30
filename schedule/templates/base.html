@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <style>
+        /* Estilos CSS para la página */
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #e5d0b1;
+        }
+        .container {
+          width: 80%;
+          margin: auto;
+          overflow: hidden;
+        }
+        header {
+          background: #50b3a2;
+          color: white;
+          padding-top: 30px;
+          min-height: 70px;
+          border-bottom: #e8491d 3px solid;
+        }
+        header a {
+          color: #ffffff;
+          text-decoration: none;
+          text-transform: uppercase;
+          font-size: 16px;
+        }
+        header ul {
+          padding: 0;
+          list-style: none;
+        }
+        header ul li {
+          display: inline;
+          padding: 0 20px 0 20px;
+        }
+        header #branding {
+          float: left;
+        }
+        header #branding h1 {
+          margin: 0;
+        }
+        header nav {
+          float: right;
+          margin-top: 10px;
+        }
+        header .highlight, header .current a {
+          color: #e8491d;
+          font-weight: bold;
+        }
+        header a:hover {
+          color: #ffffff;
+          font-weight: bold;
+        }
+      </style>
+</head>
+<body>
+
+
+<header>
+    <div class="container">
+      <div id="branding">
+        <h1><span class="highlight">Your</span> Schedule</h1>
+      </div>
+      <nav>
+        <ul>
+          <li class="current"><a href="index.html">List</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div class="container">
+    <section id="main">
+      <h1>Welcome to your Schedule plan</h1>
+      <p>This is your personalized Schedule</p>
+      <button onclick="PersonalizedSchedule()">Personalized Schedule</button>
+    </section>
+  </div>
+  
+  <script>
+    // Función JavaScript para cambiar el color de fondo
+    function cambiarColorFondo() {
+      document.body.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+  </script>
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>
+

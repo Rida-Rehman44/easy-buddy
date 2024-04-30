@@ -37,8 +37,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 
 
-
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),
+    
+    path('schedule/',include('schedule.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
