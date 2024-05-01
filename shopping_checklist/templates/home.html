@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock title%}
+{% block content %}
+    <div class="jumbotron">
+        {% if user.is_authenticated %}
+            <h1 class="display-4">Shopping Lists for {{user.profile.nick_name|default:user.first_name}}</h1>
+            <a class="btn btn-dark btn-lg" href="/shopping_checklist/create" role="button">Create a new list</a>
+             <div class="row">
+                {% for item in shopping_checklists %}
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ item.item_name }}</h5>
+                      <p class="card-text">Quantity: {{ item.quantity }}</p>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+        {% else %}
+            <br><hr><a href="{% url 'login' %}" class="btn btn-dark">Sign in</a>
+        {% endif %}
+
+    </div>
+
+{% endblock content %}
