@@ -1,0 +1,56 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+body ul {
+    padding: 0 !important; /* Remove default padding */
+    padding-left: 0 !important; /* For older browsers */
+    padding-inline-start: 0 !important; /* Remove default inline start padding */
+}
+
+h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 48px;
+    text-decoration: underline;
+}
+
+.post-title {
+    list-style-type: none; /* Remove the dot */
+    padding: 0; /* Remove default padding */
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.post-image{
+    display: block;
+    margin: 0 auto; /* Center horizontally */
+    max-width: 50%; /* 1/2 of the screen */
+    max-height: 50vw; /* 1/2 of the screen */
+}
+
+.post-content{
+    font-style: italic;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    position: fixed;
+    top: 10%;
+    left: 8%;
+}
+
+.btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
