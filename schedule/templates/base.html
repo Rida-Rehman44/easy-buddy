@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule</title>
     <style>
-        /* Estilos CSS para la página */
+        /* Style CSS for homepage*/
         body {
-          font-family: Arial, sans-serif;
+          background: linear-gradient(45deg, rgb(19, 73, 95), rgb(118, 75, 226), rgb(131, 115, 198), rgb(119, 211, 185));
+          background-attachment: fixed;
+          height:100vh;
+          padding: 3rem 0;
           margin: 0;
-          padding: 0;
-          background-color: #e5d0b1;
+          color: #555;
+          font: {
+             family: 'Lato', sans-serif;
+             size: 14px;
+          }
         }
+        
         .container {
           width: 80%;
           margin: auto;
@@ -56,6 +63,12 @@
           color: #ffffff;
           font-weight: bold;
         }
+
+        .title_list {
+
+          -webkit-text-fill-color: white;
+        }
+
       </style>
 </head>
 <body>
@@ -75,7 +88,7 @@
   </header>
   
   <div class="container">
-    <section id="main">
+    <section id="main" class="title_list">
       <h1>Welcome to your Schedule plan</h1>
       <p>This is your personalized Schedule</p>
       <button onclick="PersonalizedSchedule()">Personalized Schedule</button>
