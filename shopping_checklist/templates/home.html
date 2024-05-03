@@ -12,8 +12,11 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ checklist }}</h5>
                             {% for item in checklist.shoppingitem_set.all %}
-                            <p class="card-text">Item: {{ item.item_name }}, Quantity: {{ item.quantity }}</p>
+                                <p class="card-text">Item Name: {{ item.item_name }},Quantity: {{ item.quantity }}, Bought: {% if item.bought %}Yes{% else %}No{% endif %}</p>
+
                             {% endfor %}
+                            <a href="{% url 'edit_checklist' checklist.id %}" class="btn btn-primary">Edit</a>
+
                             <p class="card-text">Created By: {{ checklist.user.profile.nick_name|default:user.first_name }}</p>
 
                         </div>
