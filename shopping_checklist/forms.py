@@ -1,24 +1,17 @@
-from django import forms
-from django.forms import ModelForm
+from django.forms import inlineformset_factory, ModelForm, TextInput
 
-from shopping_checklist.models import ShoppingChecklist
+from shopping_checklist.models import ShoppingChecklist, ShoppingItem
 
 
-class CreateForm(ModelForm):
-    # fields we want to include and customize in our form
-    quantity = forms.CharField(max_length=100,
-                                 required=True,
-                                 widget=forms.TextInput(attrs={'placeholder': 'Quantity',
-                                                               'class': 'form-control',
-                                                               }))
-    item_name = forms.CharField(max_length=100,
-                                required=True,
-                                widget=forms.TextInput(attrs={
-                                                              'class': 'form-control',
-                                                              'list':'itemList',
-                                                              'placeholder':"Type to search...",
-                                                              }))
-
+class ShoppingItemForm(ModelForm):
     class Meta:
-        model = ShoppingChecklist
+        model = ShoppingItem
         fields = ['quantity', 'item_name']
+        widgets = {
+            'quantity': TextInput(attrs={'placeholder': 'Quantity', 'class': 'form-control'}),
+            'item_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Type to search...',
+                                          'list': 'itemList'}),
+        }
+
+
+ShoppingItemFormSet = inlineformset_factory(ShoppingChecklist, ShoppingItem, form=ShoppingItemForm, extra=1)
