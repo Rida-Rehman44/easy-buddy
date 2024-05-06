@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users.apps.UserConfig',
     'accounts',
     'chat',
+    'groups',
 ]
 
 MIDDLEWARE = [
@@ -86,13 +87,14 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),  # Default port for PostgreSQL is 5432
+        'NAME': 'easy_buddy',  # Your DB_NAME
+        'USER': 'postgres',  # Your DB_USER
+        'PASSWORD': 'postgres',  # Your DB_PASSWORD
+        'HOST': 'localhost',  # Your DB_HOST
+        'PORT': '5432',  # Your DB_PORT
     }
 }
+
 
 
 # Password validation
