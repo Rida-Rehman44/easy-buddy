@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 
 from django.urls import path, include, re_path
@@ -27,18 +28,24 @@ from users.views import ChangePasswordView
 from users.forms import LoginForm
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
-    path('', include('users.urls')),
-
-    path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='users/login.html',
-                                           authentication_form=LoginForm), name='login'),
-
-    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-
-    path('chat/', include('chat.urls')),
-
-    path('password-change/', ChangePasswordView.as_view(), name='password_change'),
-
-
+    path("admin/", admin.site.urls),
+    path("", include("users.urls")),
+    path(
+        "login/",
+        auth_views.LoginView.as_view(
+            redirect_authenticated_user=True,
+            template_name="users/login.html",
+            authentication_form=LoginForm,
+        ),
+        name="login",
+    ),
+    path("accounts/", include("accounts.urls")),
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(template_name="users/logout.html"),
+        name="logout",
+    ),
+    path('groups/', include('groups.urls')),
+    path("chat/", include("chat.urls")),
+    path("password-change/", ChangePasswordView.as_view(), name="password_change"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Groups</title>
+</head>
+<body>
+    <h1>Search Groups</h1>
+    <ul>
+        {% for group in groups %}
+            <li>
+                {{ group.name }}
+                <button onclick="joinGroup({{ group.id }})">Join</button>
+            </li>
+        {% endfor %}
+    </ul>
+    <script>
+        function joinGroup(groupId) {
+            fetch(`/groups/join/${groupId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = `/groups/detail/${groupId}/`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

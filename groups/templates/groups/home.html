@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Hello, {{ request.user.username }}!</h1>
+    <h2>Your Groups</h2>
+    <ul>
+        {% for membership in user_groups %}
+            <li>{{ membership.group.name }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'search_group' %}"><button>Search Group</button></a>
+    <a href="{% url 'create_group' %}"><button>Open Group</button></a>
+</body>
+</html>

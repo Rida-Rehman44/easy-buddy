@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
+    'accounts',
     'chat',
 ]
 
@@ -77,6 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "easy_buddy.wsgi.application"
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
