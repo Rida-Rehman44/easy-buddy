@@ -16,6 +16,36 @@ h1 {
     text-decoration: underline;
 }
 
+.post-item {
+    margin-bottom: 20px;
+}
+
+.post-info {
+    width: 50%; 
+    margin: 0 auto; 
+    border: 1px solid #ccc; 
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 20px; 
+}
+
+/* .post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} */
+
+.post-title {
+    font-size: 24px;
+    text-align: left;
+}
+
+.timestamp {
+    font-size: 16px;
+    font-weight: normal;
+    text-align: right;
+}
+
 .post-title {
     list-style-type: none; /* Remove the dot */
     padding: 0; /* Remove default padding */
