@@ -7,7 +7,7 @@
     <style>
         /* Style CSS for homepage*/
         body {
-          background: linear-gradient(45deg, rgb(19, 73, 95), rgb(118, 75, 226), rgb(131, 115, 198), rgb(119, 211, 185));
+          background: linear-gradient(45deg, rgb(19, 73, 95), rgb(118, 75, 226), rgb(131, 115, 198), rgb(119, 211, 185) );
           background-attachment: fixed;
           height:100vh;
           padding: 3rem 0;
@@ -67,6 +67,7 @@
         .title_list {
 
           -webkit-text-fill-color: white;
+          text-size-adjust: 16px ;
         }
 
       </style>
@@ -81,7 +82,10 @@
       </div>
       <nav>
         <ul>
-          <li class="current"><a href="index.html">List</a></li>
+          <li class="current"><a href="/schedule/list">List</a></li>
+          <li class="current"><a href="/schedule/add">Add</a></li>
+          <li class="current"><a href="/schedule/delete">Delete</a></li>
+
         </ul>
       </nav>
     </div>
@@ -89,9 +93,8 @@
   
   <div class="container">
     <section id="main" class="title_list">
-      <h1>Welcome to your Schedule plan</h1>
-      <p>This is your personalized Schedule</p>
-      <button onclick="PersonalizedSchedule()">Personalized Schedule</button>
+      <h1>Welcome to your Easy Scheduling ahead</h1>
+      <h2>Create your personal Scheduling!</h2>
     </section>
   </div>
   
@@ -101,6 +104,8 @@
       document.body.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
     }
   </script>
+
+  
     {% block content %}
     
     {% endblock %}
