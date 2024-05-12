@@ -32,6 +32,7 @@ urlpatterns = [
     path('', include('users.urls')),
 
     path('shopping_checklist/', include('shopping_checklist.urls'), name='shopping_checklist'),
+    path('events/', include('events.urls'), name='events'),
 
     path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='users/login.html',
                                            authentication_form=LoginForm), name='login'),

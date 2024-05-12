@@ -3,11 +3,11 @@ from django.forms import inlineformset_factory, ModelForm, TextInput
 from shopping_checklist.models import ShoppingChecklist, ShoppingItem
 
 
-
 class ChecklistForm(ModelForm):
     class Meta:
         model = ShoppingChecklist
-        fields = ['user']  # Include any other fields you want to edit
+        fields = ['name', 'event']  # Include any other fields you want to edit
+
 
 class ShoppingItemForm(ModelForm):
     class Meta:

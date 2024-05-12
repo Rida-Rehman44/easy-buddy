@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure-eicq++an*fqv(u@v04_2!-(l-&dx4l5+)vobexk6noc#q9q1m-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
-    'shopping_checklist'
+    'shopping_checklist',
+    'events'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ ROOT_URLCONF = "easy_buddy.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'] ,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

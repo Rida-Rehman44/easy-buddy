@@ -15,6 +15,7 @@
         <p class="lead">
             {% if user.is_authenticated %}
                 <a class="btn btn-dark btn-lg" href="/shopping_checklist" role="button">My Shopping Check Lists</a>
+                <a class="btn btn-dark btn-lg" href="/events" role="button">My Events</a>
 
                 <a class="btn btn-dark btn-lg" href="{% url 'logout' %}" role="button">Logout</a>
             {% else %}

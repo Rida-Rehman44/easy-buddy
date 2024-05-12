@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fastbootstrap@2.2.0/dist/css/fastbootstrap.min.css" rel="stylesheet" integrity="sha256-V6lu+OdYNKTKTsVFBuQsyIlDiRWiOmtC8VQ8Lzdm2i4=" crossorigin="anonymous">
+
+    <!--Font awesome icons -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <title>{% block title %} {% endblock %} </title>
+</head>
+<body>
+  <div class="container p-3 my-3 bg-light-subtle ">
+    <div class="row">
+      <div class="col-md-12">
+        <nav class="navbar navbar-expand-lg bg-light">
+          <div class="container-fluid">
+            <a href="/" class="navbar-brand">Home</a>
+            <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="avatar avatar-lg" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{{ user.profile.avatar.url }}" />
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="nav-item nav-link"><a href="{% url 'users-profile' %}">Profile</a></li>
+                  <li class="nav-item nav-link"><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+              </li>
+              {% else %}
+              <li class="nav-item nav-link"><a href="{% url 'login' %}" >Sign in</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
+      </div>
+        </div>
+        <!--Any flash messages pop up in any page because this is the base template-->
+        {% if messages %}
+          <div class="alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+          </div>
+        {% endif %}
+        <h1 class="display-4">Resource not found</h1>
+
+        {% block content %}{% endblock %}
+      </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- A plugin for password show/hide  -->
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+
+</body>
+</html>
