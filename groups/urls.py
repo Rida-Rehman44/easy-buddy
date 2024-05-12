@@ -6,4 +6,10 @@ urlpatterns = [
     path('search/', views.search_group, name='search_group'),  # URL pattern for searching groups
     path('join/<int:group_id>/', views.join_group, name='join_group'),  # URL pattern for joining a group
     path('home/', views.home_view, name='home'),
+    path('group_detail/<int:group_id>/', views.group_detail, name='group_detail'),
+    path('home-list/', views.home_list_view, name='home_list'),  # Adjust the view name as needed
+    path('create_shopping_checklist/', views.create_shopping_checklist, name='create_shopping_checklist'),
+    path('create_bulletin_board_message/', views.create_bulletin_board_message, name='create_bulletin_board_message'),
+    
 ]
+

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ group.name }} - Group Detail</title>
+    <!-- Add any necessary CSS or JavaScript imports -->
+</head>
+<body>
+    <h1>{{ group.name }}</h1>
+    <p><strong>Location:</strong> {{ group.location }}</p>
+    <p><strong>Description:</strong> {{ group.description }}</p>
+    
+    <!-- Chat App Placeholder -->
+    <div id="chat-app">
+        <h2>Chat Room</h2>
+        <div id="chat-messages">
+            <!-- Chat messages will be displayed here -->
+        </div>
+        <form id="chat-form">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <!-- Map Placeholder -->
+    <div id="map">
+        <!-- Add Google Maps API integration here -->
+        <!-- This could display the map with group member locations -->
+    </div>
+
+    <!-- Shared Shopping List Placeholder -->
+    <div id="shopping-list">
+        </div>
+
+    <!-- Time Schedule App Placeholder -->
+    <div id="time-schedule">
+        <!-- Implement the time schedule app feature here -->
+    </div>
+
+    <!-- Bulletin Board Placeholder -->
+    <div id="bulletin-board">
+        <!-- Implement the bulletin board feature here -->
+
+        <!-- Add a button to create bulletin board messages -->
+        <a href="{% url 'create_bulletin_board_message' %}" class="btn btn-primary">Create Bulletin Board Message</a>
+    </div>
+
+    <!-- JavaScript for WebSocket connection -->
+    <script>
+        // Create a WebSocket connection
+        const chatSocket = new WebSocket('ws://localhost:8000/ws/chat/');
+
+        // Event handlers and message sending logic goes here...
+
+        // Handle the connection being opened
+        chatSocket.onopen = function(event) {
+            console.log('WebSocket connection established');
+        };
+
+        // Handle incoming messages from the server
+        chatSocket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            // Display the received message in the chat interface
+            const messageElement = document.createElement('div');
+            messageElement.textContent = data.message;
+            document.getElementById('chat-messages').appendChild(messageElement);
+        };
+
+        // Handle the connection being closed
+        chatSocket.onclose = function(event) {
+            console.log('WebSocket connection closed');
+        };
+
+        // Handle errors
+        chatSocket.onerror = function(event) {
+            console.error('WebSocket error:', event);
+        };
+
+        // Send a message when the user submits the form
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                // Send the message to the server
+                chatSocket.send(JSON.stringify({ message: message }));
+                // Clear the input field
+                messageInput.value = '';
+            }
+        });
+
+        // Add item to shopping list
+        document.getElementById('add-item-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const itemInput = document.getElementById('item-input');
+            const item = itemInput.value.trim();
+            if (item !== '') {
+                // Add the item to the list
+                addItemToList(item);
+                // Clear the input field
+                itemInput.value = '';
+            }
+        });
+
+        // Function to add item to the list
+        function addItemToList(item) {
+            const listItem = document.createElement('li');
+            listItem.textContent = item;
+            document.getElementById('list-items').appendChild(listItem);
+        }
+
+        // Function to redirect to home_list.html
+        function redirectToShoppingChecklist() {
+            window.location.href = "{% url 'home_list' %}";
+        }
+    </script>
+
+    <!-- Add a button to redirect to home_list.html -->
+    <button onclick="redirectToShoppingChecklist()" class="btn btn-primary">Go to Shopping Checklist</button>
+</body>
+</html>

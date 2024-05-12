@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'accounts',
     'chat',
     'groups',
+    'events',
+    'shopping_checklist',
+    'bulletinboard',
 ]
 
 MIDDLEWARE = [

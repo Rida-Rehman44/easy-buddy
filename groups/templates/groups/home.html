@@ -8,7 +8,7 @@
     <h2>Your Groups</h2>
     <ul>
         {% for membership in user_groups %}
-            <li>{{ membership.group.name }}</li>
+        <li><a href="{% url 'group_detail' membership.group.id %}">{{ membership.group.name }}</a></li>
         {% endfor %}
     </ul>
     <a href="{% url 'search_group' %}"><button>Search Group</button></a>
