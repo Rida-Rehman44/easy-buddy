@@ -4,7 +4,7 @@
     <div class="jumbotron">
         {% if user.is_authenticated %}
             <h1 class="display-4">Shopping Lists for {% if not event_id %}{{ user.profile.nick_name|default:user.first_name }}{% else %}Event{% endif %}</h1>
-            <a class="btn btn-dark btn-lg" href="{% url 'create_shopping_checklist' %}{% if event_id %}?event_id={{event_id}}{% endif %}" role="button">Create a new list</a>
+            <a class="btn btn-dark btn-lg" href="{% url 'groups:create_shopping_checklist' %}{% if event_id %}?event_id={{event_id}}{% endif %}" role="button">Create a new list</a>
             <div class="row">
                 {% for checklist in shopping_checklists %}
                 <div class="col-md-4 mb-3">
@@ -62,7 +62,7 @@
                             <hr/>
 
                             <p class="card-text">Created By: {{ checklist.user.profile.nick_name|default:user.first_name }}</p>
-                            <p class="card-text">Event: {{ checklist.event.name }}</p>
+                           
 
                         </div>
                     </div>

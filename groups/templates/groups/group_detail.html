@@ -31,19 +31,19 @@
 
     <!-- Shared Shopping List Placeholder -->
     <div id="shopping-list">
+        <li><a href="{% url 'groups:home_list'  %}">{{ membership.name }}</a></li>
+
         </div>
 
     <!-- Time Schedule App Placeholder -->
-    <div id="time-schedule">
-        <!-- Implement the time schedule app feature here -->
-    </div>
+    
 
     <!-- Bulletin Board Placeholder -->
     <div id="bulletin-board">
         <!-- Implement the bulletin board feature here -->
 
         <!-- Add a button to create bulletin board messages -->
-        <a href="{% url 'create_bulletin_board_message' %}" class="btn btn-primary">Create Bulletin Board Message</a>
+ 
     </div>
 
     <!-- JavaScript for WebSocket connection -->
@@ -112,7 +112,7 @@
 
         // Function to redirect to home_list.html
         function redirectToShoppingChecklist() {
-            window.location.href = "{% url 'home_list' %}";
+            window.location.href = "{% url 'groups:home_list' %}";
         }
     </script>
 

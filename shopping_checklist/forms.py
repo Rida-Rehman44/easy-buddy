@@ -6,7 +6,7 @@ from shopping_checklist.models import ShoppingChecklist, ShoppingItem
 class ChecklistForm(ModelForm):
     class Meta:
         model = ShoppingChecklist
-        fields = ['name', 'event']  # Include any other fields you want to edit
+        fields = ['name', 'group']  # Include any other fields you want to edit
 
 
 class ShoppingItemForm(ModelForm):

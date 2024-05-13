@@ -1,7 +1,8 @@
 from django.forms import inlineformset_factory, ModelForm, TextInput
 from shopping_checklist.models import ShoppingChecklist, ShoppingItem
 from django import forms
-from .models import BulletinBoardMessage
+from .models import BulletinBoardMessage, Group
+
 
 class BulletinBoardMessageForm(forms.ModelForm):
     class Meta:
@@ -22,11 +23,16 @@ class BulletinBoardMessageForm(forms.ModelForm):
         return cleaned_data
 
 
+
 class ChecklistForm(ModelForm):
     class Meta:
         model = ShoppingChecklist
-        fields = ['name', 'event']  # Include any other fields you want to edit
+        fields = ['name', ]  # Include any other fields you want to edit
 
+class GroupForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name', 'location', 'description']  # Add more fields if necessary
 
 class ShoppingItemForm(ModelForm):
     class Meta:
@@ -37,6 +43,5 @@ class ShoppingItemForm(ModelForm):
             'item_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Type to search...',
                                           'list': 'itemList'}),
         }
-
 
 ShoppingItemFormSet = inlineformset_factory(ShoppingChecklist, ShoppingItem, form=ShoppingItemForm, extra=1)

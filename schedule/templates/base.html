@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <style>
+        /* Style CSS for homepage*/
+        body {
+          background: linear-gradient(45deg, rgb(19, 73, 95), rgb(118, 75, 226), rgb(131, 115, 198), rgb(119, 211, 185));
+          background-attachment: fixed;
+          height:100vh;
+          padding: 3rem 0;
+          margin: 0;
+          color: #555;
+          font: {
+             family: 'Lato', sans-serif;
+             size: 14px;
+          }
+        }
+        
+        .container {
+          width: 80%;
+          margin: auto;
+          overflow: hidden;
+        }
+        header {
+          background: #50b3a2;
+          color: white;
+          padding-top: 30px;
+          min-height: 70px;
+          border-bottom: #e8491d 3px solid;
+        }
+        header a {
+          color: #ffffff;
+          text-decoration: none;
+          text-transform: uppercase;
+          font-size: 16px;
+        }
+        header ul {
+          padding: 0;
+          list-style: none;
+        }
+        header ul li {
+          display: inline;
+          padding: 0 20px 0 20px;
+        }
+        header #branding {
+          float: left;
+        }
+        header #branding h1 {
+          margin: 0;
+        }
+        header nav {
+          float: right;
+          margin-top: 10px;
+        }
+        header .highlight, header .current a {
+          color: #e8491d;
+          font-weight: bold;
+        }
+        header a:hover {
+          color: #ffffff;
+          font-weight: bold;
+        }
+
+        .title_list {
+
+          -webkit-text-fill-color: white;
+          text-size-adjust: 16px ;
+        }
+
+      </style>
+</head>
+<body>
+
+
+<header>
+    <div class="container">
+      <div id="branding">
+        <h1><span class="highlight">Your</span> Schedule</h1>
+      </div>
+      <nav>
+        <ul>
+          <li class="current"><a href="/schedule/list">List</a></li>
+          <li class="current"><a href="/schedule/add">Add</a></li>
+          <li class="current"><a href="/schedule/delete">Delete</a></li>
+
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div class="container">
+    <section id="main" class="title_list">
+      <h1>Welcome to your Easy Scheduling ahead</h1>
+      <h2>Create your personal Scheduling!</h2>
+    </section>
+  </div>
+  
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>
+

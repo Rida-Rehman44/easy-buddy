@@ -1,13 +1,10 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.contrib import messages
-
-from events.models import Event
+from events.models import Event  # Import the Event model
 from .forms import ShoppingItemFormSet, ChecklistForm
 from .models import ShoppingChecklist
 
@@ -26,6 +23,7 @@ def home(request):
         ).order_by('-date_time_created').all()
 
     return render(request, 'home.html', {'shopping_checklists': shopping_checklists, 'event_id': event_id})
+
 
 
 class CreateView(LoginRequiredMixin, View):

@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Group, BulletinBoardMessage  # Import Group and BulletinBoardMessage models
-from .forms import BulletinBoardMessageForm  # Import BulletinBoardMessageForm
+from .forms import BulletinBoardMessageForm, ChecklistForm  # Import BulletinBoardMessageForm
 from django.forms import inlineformset_factory, ModelForm, TextInput
 from shopping_checklist.models import ShoppingChecklist, ShoppingItem
+from django.urls import reverse
+from .models import Artist
 
 @login_required
-def home_view(request):
-    user_groups = request.user.owned_groups.all()  # Retrieve groups owned by the user
-    return render(request, 'groups/home.html', {'user_groups': user_groups})
+def home(request):
+    user_memberships = Group.objects.all()  # Retrieve memberships of the user
+    return render(request, 'groups/home.html', {'user_memberships': user_memberships})
 
 @login_required
 def create_group(request):
@@ -42,25 +44,51 @@ def join_group(request, group_id):
 
 @login_required
 def group_detail(request, group_id):
+    # Retrieve the group object based on the provided group_id
     group = get_object_or_404(Group, pk=group_id)
-    bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
+   
+    # Retrieve bulletin board messages associated with the group
+    #bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
     
+    # Handle POST request for submitting bulletin board message form
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST)
         if form.is_valid():
+            # Save the bulletin board message with the current user and group
             message = form.save(commit=False)
             message.author = request.user
             message.group = group
             message.save()
             messages.success(request, 'Bulletin board message posted successfully!')
-            return redirect('group_detail', group_id=group_id)
+            return redirect('group_detail')
         else:
+            # Print form errors for debugging
+            print(form.errors)
             messages.error(request, 'Failed to post bulletin board message. Please check the form inputs.')
     else:
+        # Initialize an empty form for displaying in the template
         form = BulletinBoardMessageForm()
     
-    shopping_lists = ShoppingChecklist.objects.filter(group=group)
-    return render(request, 'groups/group_detail.html', {'group': group, 'shopping_lists': shopping_lists, 'bulletin_board_messages': bulletin_board_messages, 'form': form})
+    # Retrieve shopping checklists associated with the group
+    # shopping_lists = ShoppingChecklist.objects.filter(group=group)
+    
+    # Debugging: Print request POST data
+    print(request.POST)
+    
+    # Prepare context data to pass to the template
+    context = {
+        'group': group,
+        #'bulletin_board_messages': bulletin_board_messages,
+        #'shopping_lists': shopping_lists,
+        'form': form,
+    }
+    
+    # Render the template with the context data
+    return render(request, 'groups/group_detail.html', context)
+
+
+
+
 
 @login_required
 def create_shopping_checklist(request):
@@ -71,7 +99,7 @@ def create_shopping_checklist(request):
             checklist.user = request.user
             checklist.save()
             messages.success(request, 'Shopping checklist created successfully!')
-            return redirect('home_list')
+            return redirect('groups:home_list')
     else:
         form = ChecklistForm()
     return render(request, 'groups/create_shopping_checklist.html', {'form': form})
@@ -79,29 +107,9 @@ def create_shopping_checklist(request):
 @login_required
 def home_list_view(request):
     # Add any necessary logic here
-    return render(request, 'home_list.html')  
+    return render(request, 'groups/home_list.html', )  
 
-class ChecklistForm(ModelForm):
-    class Meta:
-        model = ShoppingChecklist
-        fields = ['name', 'event']  # Include any other fields you want to edit
 
-class GroupForm(ModelForm):
-    class Meta:
-        model = Group
-        fields = ['name', 'location', 'description']  # Add more fields if necessary
-
-class ShoppingItemForm(ModelForm):
-    class Meta:
-        model = ShoppingItem
-        fields = ['quantity', 'item_name', 'bought']
-        widgets = {
-            'quantity': TextInput(attrs={'placeholder': 'Quantity', 'class': 'form-control'}),
-            'item_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Type to search...',
-                                          'list': 'itemList'}),
-        }
-
-ShoppingItemFormSet = inlineformset_factory(ShoppingChecklist, ShoppingItem, form=ShoppingItemForm, extra=1)
 
 
 def create_bulletin_board_message(request):
@@ -117,6 +125,50 @@ def create_bulletin_board_message(request):
         form = BulletinBoardMessageForm()
     return render(request, 'create_bulletin_board_message.html', {'form': form})
 
+
 def bulletin_board_view(request):
-    bulletin_board_messages = BulletinBoardMessage.objects.all()
-    return render(request, 'bulletin_board.html', {'bulletin_board_messages': bulletin_board_messages})
+    # Your logic here
+    return render(request, 'bulletin_board.html')
+
+# New view functions added
+def list(request):
+    all_artist = models.Artist.objects.all()
+    context = {'all_artist': all_artist}
+    
+    if request.POST:
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        models.Artist.objects.create(firstname=firstname, lastname=lastname)
+        # if user submitted new artist --- > list.html
+        return redirect(reverse('schedule:list'))
+    else:
+        return render(request, 'schedule/list.html', context=context)
+
+
+def add(request):
+    if request.POST:
+        day = request.POST['day']
+        stage = request.POST['stage']
+        hours = request.POST['hours']
+        genre = request.POST['genre']
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        models.Artist.objects.create(day=day, stage=stage, hours=hours, genre=genre, firstname=firstname, lastname=lastname)
+        # if user submitted new artist --- > list.html
+        return redirect(reverse('schedule:add'))
+    else:
+        return render(request, 'schedule/add.html')
+
+
+def delete(request):
+    if request.method == 'POST':
+        pk = request.POST.get('pk')
+        try:
+            artist = Artist.objects.get(pk=pk)
+            artist.delete()
+            messages.success(request, 'Artist deleted successfully.')
+        except Artist.DoesNotExist:
+            messages.error(request, 'Artist with the given ID does not exist.')
+        return redirect(reverse('schedule:delete'))
+    else:
+        return render(request, 'schedule/delete.html')

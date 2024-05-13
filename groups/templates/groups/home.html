@@ -7,11 +7,11 @@
     <h1>Hello, {{ request.user.username }}!</h1>
     <h2>Your Groups</h2>
     <ul>
-        {% for membership in user_groups %}
-        <li><a href="{% url 'group_detail' membership.group.id %}">{{ membership.group.name }}</a></li>
+        {% for membership in user_memberships %}
+            <li><a href="{% url 'groups:group_detail' membership.id %}">{{ membership.name }}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'search_group' %}"><button>Search Group</button></a>
-    <a href="{% url 'create_group' %}"><button>Open Group</button></a>
+    <a href="{% url 'groups:search_group' %}"><button>Search Group</button></a>
+    <a href="{% url 'groups:create_group' %}"><button>Open Group</button></a>
 </body>
 </html>

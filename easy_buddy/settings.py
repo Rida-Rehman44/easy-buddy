@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     'chat',
     'groups',
     'events',
-    'shopping_checklist',
     'bulletinboard',
+    'shopping_checklist',
+    
 ]
 
 MIDDLEWARE = [
@@ -66,20 +67,19 @@ ROOT_URLCONF = "easy_buddy.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ]
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'groups', 'templates')],  # Path to the 'templates/groups' directory
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
         },
-    }
+    },
 ]
-
 WSGI_APPLICATION = "easy_buddy.wsgi.application"
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

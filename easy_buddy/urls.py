@@ -30,8 +30,7 @@ from users.forms import LoginForm
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("users.urls")),
-    path(
-        "login/",
+    path("login/",
         auth_views.LoginView.as_view(
             redirect_authenticated_user=True,
             template_name="users/login.html",
@@ -48,6 +47,7 @@ urlpatterns = [
     path('groups/', include('groups.urls')),
     path("chat/", include("chat.urls")),
     path('events/', include('events.urls')),
-    path('shopping_checklist/', include('shopping_checklist.urls')),
+   # path('shopping_checklist/', include('shopping_checklist.urls')),
+    path('schedule/', include('schedule.urls')),
     path("password-change/", ChangePasswordView.as_view(), name="password_change"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
