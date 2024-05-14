@@ -13,6 +13,6 @@ urlpatterns = [
     path('list/',views.list,name='list'),
     path('add/',views.add,name='add'),
     path('delete/',views.delete,name='delete'),
-    
+    path('edit/<int:checklist_id>/', views.EditView.as_view, name='edit_checklist'),
 ]
 

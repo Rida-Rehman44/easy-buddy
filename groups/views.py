@@ -7,6 +7,16 @@ from django.forms import inlineformset_factory, ModelForm, TextInput
 from shopping_checklist.models import ShoppingChecklist, ShoppingItem
 from django.urls import reverse
 from .models import Artist
+from .forms import ShoppingItemFormSet, ChecklistForm
+from .models import ShoppingChecklist
+from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.views import View
+from django.shortcuts import redirect
+from django.contrib import messages
+from .forms import ShoppingItemFormSet, ChecklistForm
+from .models import ShoppingChecklist
 
 @login_required
 def home(request):
@@ -172,3 +182,38 @@ def delete(request):
         return redirect(reverse('schedule:delete'))
     else:
         return render(request, 'schedule/delete.html')
+
+class EditView(Login,RequiredMixin,View):
+    checklist_form_class = ChecklistForm
+    item_formset_class = ShoppingItemFormSet
+    template_name = 'group:edit_checklist.html'
+
+    def get(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist_form = self.checklist_form_class(instance=checklist)
+        item_formset = self.item_formset_class(instance=checklist)
+
+        return render(request, self.template_name,
+                      {'checklist_form': checklist_form, 'item_formset': item_formset, 'checklist': checklist})
+
+    def post(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist_form = self.checklist_form_class(request.POST, instance=checklist)
+        item_formset = self.item_formset_class(request.POST, instance=checklist)
+        if checklist_form.is_valid() and item_formset.is_valid():
+            checklist_form.save()
+            item_formset.save()
+            return redirect('/shopping_checklist/')  # Redirect to home screen after editing
+        return render(request, self.template_name,
+                      {'checklist_form': checklist_form, 'item_formset': item_formset, 'checklist': checklist})
+
+class DeleteView(LoginRequiredMixin, View):
+    def get(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        return redirect('/shopping_checklist/')  # Redirect to home screen after editing
+
+
+    def post(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist.delete()
+        return redirect('/shopping_checklist/')  # Redirect to home screen after editing
