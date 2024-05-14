@@ -31,6 +31,11 @@
 
     <!-- Shared Shopping List Placeholder -->
     <div id="shopping-list">
+        <h2>Shopping Lists</h2>
+        {% for item in shopping_list %}
+        {{ item.name }}
+        {% endfor %}
+        {{ shopping_list }}
         <li><a href="{% url 'groups:home_list'  %}">{{ membership.name }}</a></li>
 
         </div>

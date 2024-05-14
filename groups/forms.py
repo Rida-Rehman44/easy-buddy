@@ -1,5 +1,5 @@
 from django.forms import inlineformset_factory, ModelForm, TextInput
-from shopping_checklist.models import ShoppingChecklist, ShoppingItem
+from .models import ShoppingChecklist, ShoppingItem
 from django import forms
 from .models import BulletinBoardMessage, Group
 

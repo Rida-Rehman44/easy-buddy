@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Group, BulletinBoardMessage  # Import Group and BulletinBoardMessage models
 from .forms import BulletinBoardMessageForm, ChecklistForm  # Import BulletinBoardMessageForm
 from django.forms import inlineformset_factory, ModelForm, TextInput
-from shopping_checklist.models import ShoppingChecklist, ShoppingItem
+from .models import ShoppingChecklist, ShoppingItem
 from django.urls import reverse
 from .models import Artist
 from .forms import ShoppingItemFormSet, ChecklistForm
@@ -57,6 +57,7 @@ def group_detail(request, group_id):
     # Retrieve the group object based on the provided group_id
     group = get_object_or_404(Group, pk=group_id)
    
+    shopping_list = ShoppingChecklist.objects.all()
     # Retrieve bulletin board messages associated with the group
     #bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
     
@@ -89,7 +90,7 @@ def group_detail(request, group_id):
     context = {
         'group': group,
         #'bulletin_board_messages': bulletin_board_messages,
-        #'shopping_lists': shopping_lists,
+        'shopping_list': shopping_list,
         'form': form,
     }
     
@@ -116,8 +117,8 @@ def create_shopping_checklist(request):
 
 @login_required
 def home_list_view(request):
-    # Add any necessary logic here
-    return render(request, 'groups/home_list.html', )  
+    group_list = Group.objects.all()
+    return render(request, 'groups/home_list.html',{'group_list': group_list } )  
 
 
 

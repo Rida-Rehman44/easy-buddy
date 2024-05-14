@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'groups',
     'events',
     'bulletinboard',
-    'shopping_checklist',
+    
     
 ]
 

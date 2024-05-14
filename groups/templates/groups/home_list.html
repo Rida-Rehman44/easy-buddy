@@ -69,9 +69,15 @@
                 </div>
                 {% endfor %}
             </div>
+            
         {% else %}
             <br><hr><a href="{% url 'login' %}" class="btn btn-dark">Sign in</a>
         {% endif %}
+    </div>
+    <div>
+        {% for group in group_list %}
+        <h1>{{ group.name }}</h1>
+        {% endfor %}
     </div>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
