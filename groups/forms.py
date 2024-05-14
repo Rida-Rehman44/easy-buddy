@@ -27,7 +27,7 @@ class BulletinBoardMessageForm(forms.ModelForm):
 class ChecklistForm(ModelForm):
     class Meta:
         model = ShoppingChecklist
-        fields = ['name', 'group_id']  # Include any other fields you want to edit
+        fields = ['name', ]  # Include any other fields you want to edit
 
 class GroupForm(ModelForm):
     class Meta:

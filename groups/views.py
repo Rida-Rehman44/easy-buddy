@@ -183,7 +183,7 @@ def delete(request):
     else:
         return render(request, 'schedule/delete.html')
 
-class EditView(Login,RequiredMixin,View):
+class EditView(LoginRequiredMixin, View):
     checklist_form_class = ChecklistForm
     item_formset_class = ShoppingItemFormSet
     template_name = 'group:edit_checklist.html'
