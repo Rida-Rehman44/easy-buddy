@@ -5,6 +5,7 @@ import requests
 from urllib.parse import urlencode, urlparse, parse_qsl
 from keys import map_api_key
 import gpsd
+import datetime as dt
 
 class Group(models.Model):
     name = models.CharField(max_length=100) 
@@ -231,3 +232,8 @@ class GoogleMapsClient(object):
         if r.status_code not in range(200, 299):
             return {}
         return r.json()
+    
+
+    
+
+    

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from keys import map_api_key
+from keys import weather_api_key
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
 
@@ -120,6 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # API keys:
 
 GOOGLE_API_Key = map_api_key
+WEATHER_API_KEY = weather_api_key
 
 
 # Internationalization

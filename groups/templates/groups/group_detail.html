@@ -29,6 +29,17 @@
             <button type="submit">Send</button>
         </form>
     </div>
+    <!-- Weather placeholder-->
+    <!-- group_detail.html -->
+<h2>Weather:</h2>
+<ul>
+  {% for forecast in hourly_forecast_data %}
+    <li>
+      <strong>{{ forecast.dt | date:"H:i" }}</strong>: {{ forecast.weather.0.main }} - {{ forecast.weather.0.description }} ({{ forecast.temp }}°C)
+    </li>
+  {% endfor %}
+</ul>
+
 
     <!-- Map Placeholder -->
     <h1>Map</h1>

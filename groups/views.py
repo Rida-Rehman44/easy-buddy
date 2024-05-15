@@ -19,7 +19,7 @@ from .forms import ShoppingItemFormSet, ChecklistForm
 from .models import ShoppingChecklist
 from .models import User_location
 from keys import map_api_key
-import json
+from keys import weather_api_key
 import requests
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bypass - delete bevor hosting
 User_location.objects.create(latitude=35.710064, longitude=139.810699, altitude=634.0)
@@ -58,13 +58,23 @@ def join_group(request, group_id):
         return redirect('group_detail', group_id=group_id)
     return render(request, 'groups/join_group.html', {'group': group})
 
+
+#####Weahter
+def get_hourly_forecast(latitude, longitude):
+    api_key = weather_api_key
+    url = f"https://pro.openweathermap.org/data/2.5/forecast/hourly?lat={latitude}&lon={longitude}&appid={api_key}&units=metric"
+    response = requests.get(url)
+    data = response.json()
+    return data
+
 @login_required
 def group_detail(request, group_id):
-    # Retrieve the group object based on the provided group_id
     group = get_object_or_404(Group, pk=group_id)
     shopping_lists = ShoppingChecklist.objects.filter(group=group)
     bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
     user_location = User_location.objects.first()
+    hourly_forecast_data = get_hourly_forecast(user_location.latitude, user_location.longitude)
+
     # Handle POST request for submitting bulletin board message form
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST)
@@ -88,9 +98,7 @@ def group_detail(request, group_id):
     # shopping_lists = ShoppingChecklist.objects.filter(group=group)
     
     # Debugging: Print request POST data
-    print(request.POST)
-    print("User Location - Latitude:", user_location.latitude)
-    print("User Location - Longitude:", user_location.longitude)
+  
     # Prepare context data to pass to the template
     context = {
         'group': group,
@@ -99,6 +107,7 @@ def group_detail(request, group_id):
         'form': form,
         'user_location': user_location,
         'map_api_key': map_api_key,
+        'hourly_forecast_data': hourly_forecast_data,
     }
     
     # Render the template with the context data
@@ -230,4 +239,10 @@ class DeleteView(LoginRequiredMixin, View):
         checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
         checklist.delete()
         return redirect('/shopping_checklist/')  # Redirect to home screen after editing
+    
+################################################################
+# Weather api
+
+
+
     
