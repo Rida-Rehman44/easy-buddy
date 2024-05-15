@@ -69,7 +69,7 @@
                                     <select class="form-control" id="group" name="group">
                                         <option value="">Select Group</option>
                                         <!-- Populate options dynamically with user's groups -->
-                                        {% for group in user_groups %}
+                                        {% for group in groups %}
                                             <option value="{{ group.id }}">{{ group.name }}</option>
                                         {% endfor %}
                                     </select>

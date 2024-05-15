@@ -104,6 +104,7 @@ def group_detail(request, group_id):
 
 @login_required
 def create_shopping_checklist(request):
+    groups = Group.objects.filter(members = request.user)
     if request.method == 'POST':
         form = ChecklistForm(request.POST)
         if form.is_valid():
@@ -115,7 +116,10 @@ def create_shopping_checklist(request):
            #return redirect('groups:group_detail', group_id=checklist.group.id)
     else:
         form = ChecklistForm()
-    return render(request, 'groups/create_shopping_checklist.html', {'form': form})
+    return render(request, 'groups/create_shopping_checklist.html', {'form': form, 'groups': groups})
+
+
+
 
 @login_required
 def home_list_view(request):
