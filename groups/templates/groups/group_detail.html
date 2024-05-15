@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ group.name }} - Group Detail</title>
     <!-- Add any necessary CSS or JavaScript imports -->
+    <style>
+        /* Add CSS styling for the map container */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <h1>{{ group.name }}</h1>
@@ -24,10 +31,13 @@
     </div>
 
     <!-- Map Placeholder -->
-    <div id="map">
-        <!-- Add Google Maps API integration here -->
-        <!-- This could display the map with group member locations -->
-    </div>
+    <h1>Map</h1>
+    <div id="map"></div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+
+
 
     <!-- Shared Shopping List Placeholder -->
     <div id="shopping-list">
@@ -121,7 +131,33 @@
         function redirectToShoppingChecklist() {
             window.location.href = "{% url 'groups:home_list' %}";
         }
+
+        
+
     </script>
+       <script src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap" async defer></script>
+
+       <script>
+           // JavaScript function to initialize the map
+           function initMap() {
+               // Replace these values with the latitude and longitude of the user's location
+               var userLat = {{ user_location.latitude }};
+               var userLng = {{ user_location.longitude }};
+               
+               // Create a map object centered at the user's location
+               var map = new google.maps.Map(document.getElementById("map"), {
+                   center: { lat: userLat, lng: userLng },
+                   zoom: 15 // Adjust the zoom level as needed
+               });
+               
+               // Create a marker at the user's location
+               var marker = new google.maps.Marker({
+                   position: { lat: userLat, lng: userLng },
+                   map: map,
+                   title: "User's Location"
+               });
+           }
+       </script>
 
     <!-- Add a button to redirect to home_list.html -->
     

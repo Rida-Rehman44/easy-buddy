@@ -17,6 +17,10 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import ShoppingItemFormSet, ChecklistForm
 from .models import ShoppingChecklist
+from .models import User_location
+from keys import map_api_key
+import json
+import requests
 
 @login_required
 def home(request):
@@ -58,10 +62,7 @@ def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     shopping_lists = ShoppingChecklist.objects.filter(group=group)
     bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
-    #---shopping_list = ShoppingChecklist.objects.all()
-    # Retrieve bulletin board messages associated with the group
-    #bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
-    
+    user_location = User_location.objects.first()
     # Handle POST request for submitting bulletin board message form
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST)
@@ -93,6 +94,8 @@ def group_detail(request, group_id):
         'bulletin_board_messages': bulletin_board_messages,
         'shopping_list': shopping_lists,
         'form': form,
+        'user_location': user_location,
+        'map_api_key': map_api_key,
     }
     
     # Render the template with the context data

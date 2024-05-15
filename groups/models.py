@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import requests
-from utllib.parse import urlencode,urlparse, parse_qsl
+from urllib.parse import urlencode, urlparse, parse_qsl
 from keys import map_api_key
+import gpsd
 
 class Group(models.Model):
     name = models.CharField(max_length=100) 
@@ -108,15 +109,68 @@ class ShoppingItem(models.Model):
 
     ###### Google Maps Api #################
 
+# gps or ip to lat and long
+class User_location(models.Model):
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    altitude = models.FloatField()
+
+    @classmethod
+    def fetch_gps_coordinates(cls):
+        # Attempt to get GPS coordinates from the GPS device
+        gpsd.connect()
+        packet = gpsd.get_current()
+
+        if packet.mode >= 2:
+            # If GPS fix is available, use GPS coordinates
+            latitude = packet.lat
+            longitude = packet.lon
+            altitude = packet.alt
+            location = cls(latitude=latitude, longitude=longitude, altitude=altitude)
+            location.save()
+            return location
+        else:
+            # If no GPS fix is available, use IP-based geolocation
+            try:
+                ip_info = requests.get('https://ipinfo.io/json')
+                ip_data = ip_info.json()
+                # Extract latitude and longitude from IP geolocation data
+                lat, lon = ip_data['loc'].split(',')
+                location = cls(latitude=float(lat), longitude=float(lon), altitude=None)
+                location.save()
+                return location
+            except Exception as e:
+                print(f"Error fetching location from IP: {e}")
+                return None
+    @classmethod
+    def fetch_and_create_location(cls):
+        lat, lng = cls.fetch_gps_coordinates()
+        if lat is not None and lng is not None:
+            # Create a new Location object with fetched coordinates
+            location = cls(latitude=lat, longitude=lng, altitude=None)
+            location.save()
+            return location
+        else:
+            return None
+            
+
+
+
+################################################################
+
+
+
 class GoogleMapsClient(object):
-    lat = None
-    lng = None
+ 
+
     data_type = 'json'
     location_query = None
     api_key = map_api_key
     
-    def __init__(self, api_key=None, address_or_postal_code=None, *args, **kwargs):
+    def __init__(self, User_location, api_key=None, address_or_postal_code=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.lat = User_location.latitude
+        self.lng = User_location.longitude 
         if api_key == None:
             raise Exception("API key is required")
         self.api_key = api_key
@@ -145,7 +199,7 @@ class GoogleMapsClient(object):
         self.lng = lng
         return lat, lng
     
-    def search(self, keyword="Mexican food", radius=5000, location=None):
+    def search(self, keyword="Supermarket", radius=5000, location=None):
         lat, lng = self.lat, self.lng
         if location != None:
             lat, lng = self.extract_lat_lng(location=location)
