@@ -1,5 +1,14 @@
 <!-- bulletin_board.html -->
 <h2>Bulletin Board</h2>
+
+<form method='post' enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post</button>
+</form>
+
+
+
 <ul>
     {% for message in bulletin_board_messages %}
         <li>

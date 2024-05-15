@@ -42,6 +42,7 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+                                            
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="small mb-1">Item Name</label>
@@ -63,10 +64,19 @@
                                         </div>
                                     {% endfor %}
                                 </div>
-
+                                <div class="form-group mt-4 mb-0">
+                                    <label for="group">Group</label>
+                                    <select class="form-control" id="group" name="group">
+                                        <option value="">Select Group</option>
+                                        <!-- Populate options dynamically with user's groups -->
+                                        {% for group in user_groups %}
+                                            <option value="{{ group.id }}">{{ group.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>  
                                 <div class="form-group mt-4 mb-0">
 
-                                    <button type="button" class="btn btn-dark" id="add-item">Add Item</button>
+                                    <button type="button" class="btn btn-dark" id="add-item">Add Item</button> 
                                 </div>
                                 <datalist id="itemList">
                                           <option value="Grill">

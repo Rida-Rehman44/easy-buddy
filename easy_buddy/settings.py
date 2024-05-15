@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'chat',
     'groups',
     'events',
-    'bulletinboard',
+
     
     
 ]
@@ -68,7 +68,7 @@ ROOT_URLCONF = "easy_buddy.urls"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'groups', 'templates')],  # Path to the 'templates/groups' directory
+        'DIRS': [os.path.join(BASE_DIR, 'groups', 'templates', 'groups')],  # Path to the 'templates/groups' directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

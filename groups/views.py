@@ -56,8 +56,9 @@ def join_group(request, group_id):
 def group_detail(request, group_id):
     # Retrieve the group object based on the provided group_id
     group = get_object_or_404(Group, pk=group_id)
-   
-    shopping_list = ShoppingChecklist.objects.all()
+    shopping_lists = ShoppingChecklist.objects.filter(group=group)
+    bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
+    #---shopping_list = ShoppingChecklist.objects.all()
     # Retrieve bulletin board messages associated with the group
     #bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
     
@@ -89,8 +90,8 @@ def group_detail(request, group_id):
     # Prepare context data to pass to the template
     context = {
         'group': group,
-        #'bulletin_board_messages': bulletin_board_messages,
-        'shopping_list': shopping_list,
+        'bulletin_board_messages': bulletin_board_messages,
+        'shopping_list': shopping_lists,
         'form': form,
     }
     
@@ -110,7 +111,8 @@ def create_shopping_checklist(request):
             checklist.user = request.user
             checklist.save()
             messages.success(request, 'Shopping checklist created successfully!')
-            return redirect('groups:home_list')
+        return redirect('groups:home_list')
+           #return redirect('groups:group_detail', group_id=checklist.group.id)
     else:
         form = ChecklistForm()
     return render(request, 'groups/create_shopping_checklist.html', {'form': form})
@@ -138,8 +140,8 @@ def create_bulletin_board_message(request):
 
 
 def bulletin_board_view(request):
-    # Your logic here
-    return render(request, 'bulletin_board.html')
+    form = BulletinBoardMessageForm()
+    return render(request, 'bulletin_board.html', {'form': form})
 
 # New view functions added
 def list(request):

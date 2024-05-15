@@ -7,15 +7,17 @@ from .models import BulletinBoardMessage, Group
 class BulletinBoardMessageForm(forms.ModelForm):
     class Meta:
         model = BulletinBoardMessage
-        fields = ['content', 'image', 'video']
+        fields = ["content", "image", "video"]
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your message here...'}),
+            "content": forms.Textarea(
+                attrs={"rows": 3, "placeholder": "Enter your message here..."}
+            ),
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        image = cleaned_data.get('image')
-        video = cleaned_data.get('video')
+        image = cleaned_data.get("image")
+        video = cleaned_data.get("video")
 
         # Check if either image or video is provided
         if not image and not video:
@@ -23,25 +25,39 @@ class BulletinBoardMessageForm(forms.ModelForm):
         return cleaned_data
 
 
-
 class ChecklistForm(ModelForm):
     class Meta:
         model = ShoppingChecklist
-        fields = ['name', ]  # Include any other fields you want to edit
+        fields = [
+            "name",
+            "group",
+        ]  # Include any other fields you want to edit
+
 
 class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = ['name', 'location', 'description']  # Add more fields if necessary
+        fields = ["name", "location", "description"]  # Add more fields if necessary
+
 
 class ShoppingItemForm(ModelForm):
     class Meta:
         model = ShoppingItem
-        fields = ['quantity', 'item_name', 'bought']
+        fields = ["quantity", "item_name", "bought"]
         widgets = {
-            'quantity': TextInput(attrs={'placeholder': 'Quantity', 'class': 'form-control'}),
-            'item_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Type to search...',
-                                          'list': 'itemList'}),
+            "quantity": TextInput(
+                attrs={"placeholder": "Quantity", "class": "form-control"}
+            ),
+            "item_name": TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Type to search...",
+                    "list": "itemList",
+                }
+            ),
         }
 
-ShoppingItemFormSet = inlineformset_factory(ShoppingChecklist, ShoppingItem, form=ShoppingItemForm, extra=1)
+
+ShoppingItemFormSet = inlineformset_factory(
+    ShoppingChecklist, ShoppingItem, form=ShoppingItemForm, extra=1
+)

@@ -47,6 +47,5 @@ urlpatterns = [
     path('groups/', include('groups.urls')),
     path("chat/", include("chat.urls")),
     path('events/', include('events.urls')),
-    path('schedule/', include('schedule.urls')),
     path("password-change/", ChangePasswordView.as_view(), name="password_change"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

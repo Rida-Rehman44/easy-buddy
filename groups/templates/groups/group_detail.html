@@ -32,20 +32,22 @@
     <!-- Shared Shopping List Placeholder -->
     <div id="shopping-list">
         <h2>Shopping Lists</h2>
-        {% for item in shopping_list %}
-        {{ item.name }}
-        {% endfor %}
-        {{ shopping_list }}
-        <li><a href="{% url 'groups:home_list'  %}">{{ membership.name }}</a></li>
-
+        <ul>
+            {% for shopping_list in shopping_lists %}
+            <li>{{ shopping_list.name }}</li>
+            {% endfor %}
+        </ul>
+            <li><a href="{% url 'groups:home_list'  %}">{{ membership.name }}</a></li>
+        
         </div>
-
+        <button onclick="redirectToShoppingChecklist()" class="btn btn-primary">Go to Shopping Checklist</button>
     <!-- Time Schedule App Placeholder -->
     
 
     <!-- Bulletin Board Placeholder -->
     <div id="bulletin-board">
-        
+        <h2>BulletinBoard</h2>
+            <li><a href="{% url 'groups:bulletin_board'  %}">BulletinBoard</a></li>
 
         <!-- Add a button to create bulletin board messages -->
  
@@ -122,6 +124,6 @@
     </script>
 
     <!-- Add a button to redirect to home_list.html -->
-    <button onclick="redirectToShoppingChecklist()" class="btn btn-primary">Go to Shopping Checklist</button>
+    
 </body>
 </html>
