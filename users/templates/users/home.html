@@ -1,5 +1,6 @@
 {% extends "users/base.html" %}
 {% block title %} Home Page {% endblock title%}
+
 {% block content %}
     <div class="jumbotron">
         <h1 class="display-4">Welcome, {{user.first_name.title|default:'Guest'}}</h1>
@@ -17,3 +18,4 @@
     </div>
 
 {% endblock content %}
+

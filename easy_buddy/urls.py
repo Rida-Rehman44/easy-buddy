@@ -39,6 +39,7 @@ urlpatterns = [
 
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),
     
+    
     path('schedule/',include('schedule.urls')),
 
 

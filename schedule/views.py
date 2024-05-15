@@ -9,6 +9,7 @@ from . import models
 
 # Create your views here.
 
+
 def list(request):
     all_artist = models.Artist.objects.all()
     context = {'all_artist':all_artist}
