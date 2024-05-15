@@ -224,3 +224,4 @@ class DeleteView(LoginRequiredMixin, View):
         checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
         checklist.delete()
         return redirect('/shopping_checklist/')  # Redirect to home screen after editing
+    
