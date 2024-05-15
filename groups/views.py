@@ -21,7 +21,9 @@ from .models import User_location
 from keys import map_api_key
 import json
 import requests
-
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bypass - delete bevor hosting
+User_location.objects.create(latitude=35.710064, longitude=139.810699, altitude=634.0)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @login_required
 def home(request):
     user_memberships = Group.objects.all()  # Retrieve memberships of the user
@@ -87,7 +89,8 @@ def group_detail(request, group_id):
     
     # Debugging: Print request POST data
     print(request.POST)
-    
+    print("User Location - Latitude:", user_location.latitude)
+    print("User Location - Longitude:", user_location.longitude)
     # Prepare context data to pass to the template
     context = {
         'group': group,
