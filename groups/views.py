@@ -7,7 +7,7 @@ from django.forms import inlineformset_factory, ModelForm, TextInput
 from .models import ShoppingChecklist, ShoppingItem
 from django.urls import reverse
 from .models import Artist
-from .forms import ShoppingItemFormSet, ChecklistForm
+from .forms import ShoppingItemFormSet, ChecklistForm, GroupForm
 from .models import ShoppingChecklist
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -164,13 +164,13 @@ def bulletin_board_view(request):
 
 # New view functions added
 def list(request):
-    all_artist = models.Artist.objects.all()
+    all_artist = Artist.objects.all()
     context = {'all_artist': all_artist}
     
     if request.POST:
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
-        models.Artist.objects.create(firstname=firstname, lastname=lastname)
+        Artist.objects.create(firstname=firstname, lastname=lastname)
         # if user submitted new artist --- > list.html
         return redirect(reverse('schedule:list'))
     else:
@@ -185,7 +185,7 @@ def add(request):
         genre = request.POST['genre']
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
-        models.Artist.objects.create(day=day, stage=stage, hours=hours, genre=genre, firstname=firstname, lastname=lastname)
+        Artist.objects.create(day=day, stage=stage, hours=hours, genre=genre, firstname=firstname, lastname=lastname)
         # if user submitted new artist --- > list.html
         return redirect(reverse('schedule:add'))
     else:

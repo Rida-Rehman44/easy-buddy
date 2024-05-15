@@ -7,6 +7,7 @@ from keys import map_api_key
 import gpsd
 import datetime as dt
 
+
 class Group(models.Model):
     name = models.CharField(max_length=100) 
     location = models.CharField(max_length=100)
