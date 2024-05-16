@@ -26,8 +26,12 @@ from users.views import ChangePasswordView
 
 from users.forms import LoginForm
 
+from .views import HomeView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    path('', HomeView.as_view(), name= "home"),
 
     path('', include('users.urls')),
 
