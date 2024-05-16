@@ -235,6 +235,16 @@ class GoogleMapsClient(object):
         return r.json()
     
 
+
+################################################################
+# Google Calender App
+
+
+class GroupCalendar(models.Model):
+    name = models.CharField(max_length=100)
+    calendar_id = models.CharField(max_length=100)
+    # Add other fields as needed
+
     
 
     

@@ -1,28 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Group, BulletinBoardMessage  # Import Group and BulletinBoardMessage models
-from .forms import BulletinBoardMessageForm, ChecklistForm  # Import BulletinBoardMessageForm
+from .models import Group, BulletinBoardMessage, ShoppingChecklist, User_location, ShoppingItem, Artist, GroupCalendar  # Import Group and BulletinBoardMessage models
+from .forms import BulletinBoardMessageForm, ChecklistForm, ShoppingItemFormSet, ChecklistForm, GroupForm  # Import BulletinBoardMessageForm
 from django.forms import inlineformset_factory, ModelForm, TextInput
-from .models import ShoppingChecklist, ShoppingItem
 from django.urls import reverse
-from .models import Artist
-from .forms import ShoppingItemFormSet, ChecklistForm, GroupForm
-from .models import ShoppingChecklist
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views import View
 from django.shortcuts import redirect
 from django.contrib import messages
-from .forms import ShoppingItemFormSet, ChecklistForm
-from .models import ShoppingChecklist
-from .models import User_location
-from keys import map_api_key
-from keys import weather_api_key
+from keys import map_api_key, weather_api_key
 import requests
+from google_auth_oauthlib.flow import Flow
+from .utils import get_calendar_events
+
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bypass - delete bevor hosting
-User_location.objects.create(latitude=35.710064, longitude=139.810699, altitude=634.0)
+#User_location.objects.create(latitude=35.710064, longitude=139.810699, altitude=634.0)
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @login_required
 def home(request):
@@ -75,6 +69,15 @@ def group_detail(request, group_id):
     user_location = User_location.objects.first()
     hourly_forecast_data = get_hourly_forecast(user_location.latitude, user_location.longitude)
 
+    try:
+        group_calendar = GroupCalendar.objects.get(name=group.name)
+        calendar_id = group_calendar.calendar_id
+        events = get_calendar_events(calendar_id)
+    except GroupCalendar.DoesNotExist:
+        group_calendar = None
+        calendar_id = None
+        events = None
+
     # Handle POST request for submitting bulletin board message form
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST)
@@ -85,7 +88,7 @@ def group_detail(request, group_id):
             message.group = group
             message.save()
             messages.success(request, 'Bulletin board message posted successfully!')
-            return redirect('group_detail')
+            return redirect('group_detail', group_id=group_id)
         else:
             # Print form errors for debugging
             print(form.errors)
@@ -94,11 +97,6 @@ def group_detail(request, group_id):
         # Initialize an empty form for displaying in the template
         form = BulletinBoardMessageForm()
     
-    # Retrieve shopping checklists associated with the group
-    # shopping_lists = ShoppingChecklist.objects.filter(group=group)
-    
-    # Debugging: Print request POST data
-  
     # Prepare context data to pass to the template
     context = {
         'group': group,
@@ -108,10 +106,65 @@ def group_detail(request, group_id):
         'user_location': user_location,
         'map_api_key': map_api_key,
         'hourly_forecast_data': hourly_forecast_data,
+        'calendar_id': calendar_id,
+        'group_calendar': group_calendar,
+        'events': events,
     }
     
     # Render the template with the context data
     return render(request, 'groups/group_detail.html', context)
+
+# @login_required
+# def group_detail(request, group_id):
+#     group = get_object_or_404(Group, pk=group_id)
+#     shopping_lists = ShoppingChecklist.objects.filter(group=group)
+#     bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
+#     user_location = User_location.objects.first()
+#     hourly_forecast_data = get_hourly_forecast(user_location.latitude, user_location.longitude)
+#     group_calendar = GroupCalendar.objects.get(name=group.name)
+#     calendar_id = group_calendar.calendar_id
+#     events = get_calendar_events(calendar_id)
+
+#     # Handle POST request for submitting bulletin board message form
+#     if request.method == 'POST':
+#         form = BulletinBoardMessageForm(request.POST)
+#         if form.is_valid():
+#             # Save the bulletin board message with the current user and group
+#             message = form.save(commit=False)
+#             message.author = request.user
+#             message.group = group
+#             message.save()
+#             messages.success(request, 'Bulletin board message posted successfully!')
+#             return redirect('group_detail')
+#         else:
+#             # Print form errors for debugging
+#             print(form.errors)
+#             messages.error(request, 'Failed to post bulletin board message. Please check the form inputs.')
+#     else:
+#         # Initialize an empty form for displaying in the template
+#         form = BulletinBoardMessageForm()
+    
+#     # Retrieve shopping checklists associated with the group
+#     # shopping_lists = ShoppingChecklist.objects.filter(group=group)
+    
+#     # Debugging: Print request POST data
+  
+#     # Prepare context data to pass to the template
+#     context = {
+#         'group': group,
+#         'bulletin_board_messages': bulletin_board_messages,
+#         'shopping_list': shopping_lists,
+#         'form': form,
+#         'user_location': user_location,
+#         'map_api_key': map_api_key,
+#         'hourly_forecast_data': hourly_forecast_data,
+#         'calendar_id': calendar_id,
+#         'group_calendar': group_calendar,
+#         'events': events,
+#     }
+    
+#     # Render the template with the context data
+#     return render(request, 'groups/group_detail.html', context)
 
 
 
@@ -241,8 +294,30 @@ class DeleteView(LoginRequiredMixin, View):
         return redirect('/shopping_checklist/')  # Redirect to home screen after editing
     
 ################################################################
-# Weather api
+# Google Calender
 
 
+def google_authenticate(request):
+    flow = Flow.from_client_secrets_file(
+        'client_secret.json',
+        scopes=['https://www.googleapis.com/auth/calendar'],
+        redirect_uri='http://localhost:8000/callback/google/',
+    )
+    authorization_url, state = flow.authorization_url(access_type='offline')
+    request.session['oauth_state'] = state
+    return redirect(authorization_url)
+
+def google_callback(request):
+    state = request.session.pop('oauth_state', None)
+    flow = Flow.from_client_secrets_file(
+        'client_secret.json',
+        scopes=['https://www.googleapis.com/auth/calendar'],
+        state=state,
+        redirect_uri='http://localhost:8000/callback/google/',
+    )
+    flow.fetch_token(code=request.GET['code'])
+    credentials = flow.credentials
+    # Save credentials to user profile or session
+    return redirect('/')
 
     

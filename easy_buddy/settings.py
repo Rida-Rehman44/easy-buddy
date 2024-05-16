@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from keys import map_api_key
-from keys import weather_api_key
+from keys import map_api_key, django_secret,weather_api_key
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
 
@@ -27,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-eicq++an*fqv(u@v04_2!-(l-&dx4l5+)vobexk6noc#q9q1m-"
+SECRET_KEY = django_secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -154,6 +153,7 @@ AUTHENTICATION_BACKENDS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+LOGIN_REDIRECT_URL = '/callback/google/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'

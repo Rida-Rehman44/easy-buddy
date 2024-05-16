@@ -62,8 +62,42 @@
         
         </div>
         <button onclick="redirectToShoppingChecklist()" class="btn btn-primary">Go to Shopping Checklist</button>
-    <!-- Time Schedule App Placeholder -->
-    
+    <!-- calender App Placeholder -->
+        <h1>Calendar</h1>
+        
+        <div>
+            <h1>{{ group.name }}</h1>
+            <div id="calendar"></div>
+        </div>
+        <script>
+            function renderCalendar(calendarId) {
+                gapi.client.calendar.events.list({
+                    'calendarId': calendarId,
+                    'timeMin': (new Date()).toISOString(),
+                    'showDeleted': false,
+                    'singleEvents': true,
+                    'maxResults': 10,
+                    'orderBy': 'startTime'
+                }).then(function(response) {
+                    var events = response.result.items;
+                    // Process and render events as needed
+                });
+            }
+        
+            function initClient() {
+                // Initialize the JavaScript client library
+                gapi.client.init({
+                    apiKey: 'YOUR_API_KEY',
+                    discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+                }).then(function() {
+                    // Call renderCalendar function with the provided calendarId
+                    renderCalendar('{{ calendar_id }}');
+                });
+            }
+        </script>
+        
+        
+        <script src="https://apis.google.com/js/api.js?onload=initClient"></script>
 
     <!-- Bulletin Board Placeholder -->
     <div id="bulletin-board">
@@ -152,8 +186,8 @@
            // JavaScript function to initialize the map
            function initMap() {
                // Replace these values with the latitude and longitude of the user's location
-               var userLat = {{ user_location.latitude }};
-               var userLng = {{ user_location.longitude }};
+               var userLat =  user_location.latitude ;
+               var userLng =  user_location.longitude ;
                
                // Create a map object centered at the user's location
                var map = new google.maps.Map(document.getElementById("map"), {
