@@ -1,0 +1,33 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar Events</title>
+</head>
+<body>
+    <h1>Google Calendar Events</h1>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.summary }}</strong>
+                <br>
+                {% if event.start.dateTime %}
+                    <strong>Starts:</strong> {{ event.start.dateTime | date:"DATETIME_FORMAT" }}
+                {% else %}
+                    <strong>Starts:</strong> {{ event.start.date }}
+                {% endif %}
+                <br>
+                {% if event.end.dateTime %}
+                    <strong>Ends:</strong> {{ event.end.dateTime | date:"DATETIME_FORMAT" }}
+                {% else %}
+                    <strong>Ends:</strong> {{ event.end.date }}
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No events found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

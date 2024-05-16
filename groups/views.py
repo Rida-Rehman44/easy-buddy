@@ -15,13 +15,47 @@ import requests
 from google_auth_oauthlib.flow import Flow
 from .utils import get_calendar_events
 
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+import datetime
+
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bypass - delete bevor hosting
 #User_location.objects.create(latitude=35.710064, longitude=139.810699, altitude=634.0)
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @login_required
 def home(request):
-    user_memberships = Group.objects.all()  # Retrieve memberships of the user
+    user_memberships = Group.objects.all()
     return render(request, 'groups/home.html', {'user_memberships': user_memberships})
+
+@login_required
+def google_home(request):
+    user_memberships = Group.objects.all()
+
+    if 'credentials' not in request.session:
+        return redirect('auth')  # Redirect to authentication if credentials are not available
+
+    # Load credentials from session
+    credentials = Credentials.from_authorized_user_info(request.session['credentials'])
+
+    # If the credentials are expired, refresh them
+    if credentials.expired:
+        credentials.refresh(Request())
+
+    # Build the Google Calendar service
+    service = build('calendar', 'v3', credentials=credentials)
+
+    # Get the current date and time
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat() + 'Z'  # 'Z' indicates UTC time
+
+    # Fetch the next 10 events from the primary calendar
+    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                          maxResults=10, singleEvents=True,
+                                          orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+    # Pass the events data and user memberships to the template for rendering
+    return render(request, 'groups/google_home.html', {'events': events, 'user_memberships': user_memberships})
 
 @login_required
 def create_group(request):
@@ -320,4 +354,15 @@ def google_callback(request):
     # Save credentials to user profile or session
     return redirect('/')
 
-    
+def auth_callback(request):
+    state = request.session.pop('state', None)
+    flow = Flow.from_client_secrets_file(
+        'client_secret.json',
+        scopes=['https://www.googleapis.com/auth/calendar'],
+        state=state,
+        redirect_uri='http://127.0.0.1:8000/calendar/auth/callback/'
+    )
+    flow.fetch_token(authorization_response=request.build_absolute_uri())
+    credentials = flow.credentials
+    # Store or use credentials.access_token for making API requests
+    return redirect(reverse('/'))    
