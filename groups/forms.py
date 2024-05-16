@@ -7,7 +7,7 @@ from .models import BulletinBoardMessage, Group
 class BulletinBoardMessageForm(forms.ModelForm):
     class Meta:
         model = BulletinBoardMessage
-        fields = ["content", "image", "video"]
+        fields = ["content", "image", "video", 'group']
         widgets = {
             "content": forms.Textarea(
                 attrs={"rows": 3, "placeholder": "Enter your message here..."}

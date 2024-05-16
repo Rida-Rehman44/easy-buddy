@@ -218,7 +218,12 @@ def create_shopping_checklist(request):
            #return redirect('groups:group_detail', group_id=checklist.group.id)
     else:
         form = ChecklistForm()
+
+
     return render(request, 'groups/create_shopping_checklist.html', {'form': form, 'groups': groups})
+    
+    
+
 
 
 
@@ -231,11 +236,11 @@ def home_list_view(request):
 
 
 
-def create_bulletin_board_message(request):
+def create_bulletin_board_message(request, group_id):
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST, request.FILES)
         if form.is_valid():
-            bulletin_board_message = form.save(commit=False)
+            bulletin_board_message = form
             bulletin_board_message.author = request.user
             bulletin_board_message.group = request.user.group_set.first()  # Assuming user is associated with only one group
             bulletin_board_message.save()
@@ -245,9 +250,23 @@ def create_bulletin_board_message(request):
     return render(request, 'create_bulletin_board_message.html', {'form': form})
 
 
-def bulletin_board_view(request):
-    form = BulletinBoardMessageForm()
-    return render(request, 'bulletin_board.html', {'form': form})
+def bulletin_board_view(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
+    post = BulletinBoardMessage.objects.filter(id=request.POST.get(group.id))
+    if request.method == 'POST':
+        form = BulletinBoardMessageForm(request.POST, request.FILES)
+        if form.is_valid():
+            bulletin_board_message = form.save(commit=False)
+           # bulletin_board_message = BulletinBoardMessageForm(request.POST, request.FILES)
+            bulletin_board_message.author = request.user
+           # bulletin_board_message.group = request.user.joined_groups 
+            bulletin_board_message.save()
+            # return redirect('group_detail', group_id=bulletin_board_message.group.id)
+    else:
+        form = BulletinBoardMessageForm()
+    context = {
+            'group': group,}
+    return render(request, 'bulletin_board.html', {'form': form, 'post': post})
 
 # New view functions added
 def list(request):
