@@ -15,6 +15,7 @@ import os
 
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
+from keys import map_api_key, weather_api_key, g_auth_client_id, g_auth_client_secret,django_secret_key
 
 load_dotenv()
 
@@ -26,12 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-eicq++an*fqv(u@v04_2!-(l-&dx4l5+)vobexk6noc#q9q1m-"
+SECRET_KEY = django_secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -44,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
+    'event_calendar.apps.EventCalendarConfig',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'PASSWORD': "Dci1234!",
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),  # Default port for PostgreSQL is 5432
     }
@@ -152,3 +157,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+GOOGLE_OAUTH2_CLIENT_ID = g_auth_client_id
+GOOGLE_OAUTH2_CLIENT_SECRET = g_auth_client_secret

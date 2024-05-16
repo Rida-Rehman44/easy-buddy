@@ -5,3 +5,5 @@
 .vscode
 .idea/*
 db.sqlite3
+event_calendar/client_secret.json
+keys.py
