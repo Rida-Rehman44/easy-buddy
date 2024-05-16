@@ -18,6 +18,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     move();
-});
-
-
+})
