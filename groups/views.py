@@ -102,7 +102,7 @@ def group_detail(request, group_id):
     bulletin_board_messages = BulletinBoardMessage.objects.filter(group=group)
     user_location = User_location.objects.first()
     hourly_forecast_data = get_hourly_forecast(user_location.latitude, user_location.longitude)
-
+    bulletin_board = BulletinBoardMessage.objects.filter(group=group)
     try:
         group_calendar = GroupCalendar.objects.get(name=group.name)
         calendar_id = group_calendar.calendar_id
@@ -143,6 +143,8 @@ def group_detail(request, group_id):
         'calendar_id': calendar_id,
         'group_calendar': group_calendar,
         'events': events,
+        'bulletinBoard': bulletin_board,
+        
     }
     
     # Render the template with the context data
@@ -237,6 +239,7 @@ def home_list_view(request):
 
 
 def create_bulletin_board_message(request, group_id):
+    group = Group.objects.get(id=group_id)
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -247,28 +250,35 @@ def create_bulletin_board_message(request, group_id):
             return redirect('group_detail', group_id=bulletin_board_message.group.id)
     else:
         form = BulletinBoardMessageForm()
-    return render(request, 'create_bulletin_board_message.html', {'form': form})
+    context = {             
+            'group': group,
+            'form': form}
+    return render(request, 'create_bulletin_board_message.html', context)
 
 
 def bulletin_board_view(request, group_id):
-    group = get_object_or_404(Group, pk=group_id)
-    post = BulletinBoardMessage.objects.filter(id=request.POST.get(group.id))
+    group = Group.objects.get(id=group_id)
+    posts = BulletinBoardMessage.objects.all().filter(group=group)
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST, request.FILES)
         if form.is_valid():
             bulletin_board_message = form.save(commit=False)
-           # bulletin_board_message = BulletinBoardMessageForm(request.POST, request.FILES)
             bulletin_board_message.author = request.user
-           # bulletin_board_message.group = request.user.joined_groups 
             bulletin_board_message.save()
-            # return redirect('group_detail', group_id=bulletin_board_message.group.id)
+   
     else:
         form = BulletinBoardMessageForm()
     context = {
-            'group': group,}
-    return render(request, 'bulletin_board.html', {'form': form, 'post': post})
+            'form': form, 
+            'group': group,
+            'posts': posts}
+    return render(request, 'bulletin_board.html', context)
 
 # New view functions added
+
+
+
+
 def list(request):
     all_artist = Artist.objects.all()
     context = {'all_artist': all_artist}

@@ -36,8 +36,7 @@ class GroupMembership(models.Model):
 class BulletinBoardMessage(models.Model):
     content = models.TextField()
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="group_bulletinboard_messages"
-    )
+        User, on_delete=models.CASCADE, related_name="group_bulletinboard_messages")
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to="bulletinboard/images/", null=True, blank=True)
@@ -246,5 +245,20 @@ class GroupCalendar(models.Model):
     # Add other fields as needed
 
     
+class Bulletin_Board(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to="bulletinboard/images/", null=True, blank=True)
+    video = models.FileField(upload_to="bulletinboard/videos/", null=True, blank=True)
+    # Add other fields as needed
 
+    class Meta:
+        app_label = "groups"
+
+    def __str__(self):
+        return self.title
     

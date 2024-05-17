@@ -102,7 +102,8 @@
     <!-- Bulletin Board Placeholder -->
     <div id="bulletin-board">
         <h2>BulletinBoard</h2>
-            <li><a href="{% url 'groups:bulletin_board'  %}">BulletinBoard</a></li>
+            <li><a href="{% url 'groups:bulletin_board' group.id %}">BulletinBoard</a></li>
+
 
         <!-- Add a button to create bulletin board messages -->
  

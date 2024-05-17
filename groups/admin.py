@@ -7,6 +7,6 @@ admin.site.register(Artist)
 admin.site.register(ShoppingChecklist)
 admin.site.register(GroupCalendar)
 admin.site.register(BulletinBoardMessage)
-admin.site.register(BulletinBoards)
+admin.site.register(Bulletin_Board)
  ###
 # Register your models here.

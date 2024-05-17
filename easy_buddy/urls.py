@@ -28,6 +28,7 @@ from users.views import ChangePasswordView
 from users.forms import LoginForm
 
 urlpatterns = [
+    path('', include('apimodule.urls')),
     path("admin/", admin.site.urls),
     path("", include("users.urls")),
     path("login/",
