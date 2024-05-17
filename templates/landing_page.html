@@ -8,6 +8,56 @@
         /* Style CSS for homepage*/
         @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 
+
+
+
+        .container {
+          width: 80%;
+          margin: auto;
+          overflow: hidden;
+        }
+        header {
+          background: black;
+          color: white;
+          padding-top: 30px;
+          min-height: 70px;
+          
+        }
+        
+        header a {
+          color: #ffffff;
+          text-decoration: none;
+          text-transform: uppercase;
+          font-size: 16px;
+        }
+        header ul {
+          padding: 0;
+          list-style: none;
+        }
+        header ul li {
+          display: inline;
+          padding: 0 20px 0 20px;
+        }
+        header #branding {
+          float: left;
+        }
+        header #branding h1 {
+          margin: 0;
+        }
+        header nav {
+          float: right;
+          margin-top: 10px;
+        }
+        header .highlight, header .current a {
+          color: white;
+          font-weight: bold;
+        }
+        header a:hover {
+          color: #ffffff;
+          font-weight: bold;
+        }
+
+       
 :root {
   --color-bg1: rgb(8, 10, 15);
   --color-bg2: rgb(0, 17, 32);
@@ -288,14 +338,34 @@ p {
  
 }
 
-
-
       </style>
+
+
 </head>
+
+
+<header>
+    <div class="container">
+      <div id="branding">
+        <h1><span class="highlight">Easy</span> Buddy</h1>
+      </div>
+      <nav>
+        <ul>
+          <li class="current"><a href=" /login">Login</a></li>
+          <li class="current"><a href="/schedule/delete">Events</a></li>
+          <li class="current"><a href="/schedule/list">Groups</a></li>
+          <li class="current"><a href="/schedule/add">Schedule</a></li>
+
+        </ul>
+      </nav>
+    </div>
+  </header>
 <body>
 
 
 <header>
+
+ 
     
   <div class="card">
     <svg 
@@ -322,10 +392,8 @@ p {
       <p>Welcome to <b>Easy buddy</b> make your travel plans easier!</p>
     </div>
     <br>
-    <button id="myButton" class="btn-primary">
-      <a href="users/base.html">LOGIN</a>
-    </button>
   </div>
+
   <div class="gradient-bg">
     <svg 
          viewBox="0 0 100vw 100vw"
