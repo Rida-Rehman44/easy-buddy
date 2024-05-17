@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apimodule',
     'users.apps.UserConfig',
     'accounts',
+    'shopping_checklist', 
     'chat',
     'groups',
     'events',

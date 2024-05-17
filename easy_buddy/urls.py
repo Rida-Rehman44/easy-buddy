@@ -28,10 +28,11 @@ from users.views import ChangePasswordView
 from users.forms import LoginForm
 
 urlpatterns = [
-    path('', include('apimodule.urls')),
+    path("", include("apimodule.urls")),
     path("admin/", admin.site.urls),
     path("", include("users.urls")),
-    path("login/",
+    path(
+        "login/",
         auth_views.LoginView.as_view(
             redirect_authenticated_user=True,
             template_name="users/login.html",
@@ -39,14 +40,15 @@ urlpatterns = [
         ),
         name="login",
     ),
+    path("shopping_checklist", include("shopping_checklist.urls")),
     path("accounts/", include("accounts.urls")),
     path(
         "logout/",
         auth_views.LogoutView.as_view(template_name="users/logout.html"),
         name="logout",
     ),
-    path('groups/', include('groups.urls')),
+    path("groups/", include("groups.urls")),
     path("chat/", include("chat.urls")),
-    path('events/', include('events.urls')),
+    path("events/", include("events.urls")),
     path("password-change/", ChangePasswordView.as_view(), name="password_change"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

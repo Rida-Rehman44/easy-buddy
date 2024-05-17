@@ -12,6 +12,7 @@ class Group(models.Model):
     name = models.CharField(max_length=100) 
     location = models.CharField(max_length=100)
     description = models.TextField()
+    #event = models.ForeignKey('Event', on_delete=models.CASCADE, null=True, blank=True)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="owned_groups"
     )
@@ -88,9 +89,9 @@ class Artist(models.Model):
 
 
 class ShoppingChecklist(models.Model):
-    name = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_time_created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='groups_shopping_checklists')
+    name = models.CharField(max_length=255, default="") 
+    date_time_created = models.DateTimeField(default=timezone.now, editable=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, related_name='group')
     
     def __str__(self):

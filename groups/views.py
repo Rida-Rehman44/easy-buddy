@@ -204,8 +204,6 @@ def group_detail(request, group_id):
 
 
 
-
-
 @login_required
 def create_shopping_checklist(request):
     groups = Group.objects.filter(members = request.user)
@@ -216,24 +214,21 @@ def create_shopping_checklist(request):
             checklist.user = request.user
             checklist.save()
             messages.success(request, 'Shopping checklist created successfully!')
-        return redirect('groups:home_list')
-           #return redirect('groups:group_detail', group_id=checklist.group.id)
+        return redirect('group_detail', group_id=checklist.group.id)
     else:
         form = ChecklistForm()
-
-
-    return render(request, 'groups/create_shopping_checklist.html', {'form': form, 'groups': groups})
+    context = {
+        'form': form,
+        'groups': groups
+    }
+    return render(request, 'groups/create_shopping_checklist.html', context)
+  
     
-    
-
-
-
-
-
+ 
 @login_required
 def home_list_view(request):
-    group_list = Group.objects.all()
-    return render(request, 'groups/home_list.html',{'group_list': group_list } )  
+    
+    return render(request, 'groups/home_list.html' )  
 
 
 

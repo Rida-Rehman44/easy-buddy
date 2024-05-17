@@ -1,4 +1,5 @@
 import uuid
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
@@ -9,7 +10,7 @@ from .forms import EventForm
 @login_required
 def event_list(request):
     events = Event.objects.filter(group__in=request.user.groups.all())
-    return render(request, 'events/event_list.html', {'events': events})
+    return render(request, 'events_list.html', {'events': events})
 
 
 @login_required
@@ -31,7 +32,7 @@ def event_create(request):
             return redirect('event_list')
     else:
         form = EventForm()
-    return render(request, 'events/event_form.html', {'form': form})
+    return render(request, 'events_form.html', {'form': form})
 
 
 @login_required
@@ -53,4 +54,4 @@ def event_edit(request, event_id):
         users = event.group.user_set.all()
         emails = ', '.join(map(lambda u: u.email, users))
 
-    return render(request, 'events/event_form.html', {'form': form, 'event': event, 'users': emails})
+    return render(request, 'events_form.html', {'form': form, 'event': event, 'users': emails})
