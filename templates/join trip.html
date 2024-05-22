@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Join Trip</title>
+</head>
+<body>
+    <h1>Join {{ trip.name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Join Trip</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Trip</title>
+</head>
+<body>
+    <h1>Search Trips</h1>
+    <ul>
+        {% for trip in trips %}
+            <li>
+                {{ trip.name }}
+                <button onclick="joinTrip({{ trip.id }})">Join</button>
+            </li>
+        {% endfor %}
+    </ul>
+    <script>
+        function joinTrip(tripId) {
+            fetch(`/trips/join/${tripId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = `/trips/trip_detail/${tripId}/`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

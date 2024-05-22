@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulletin Board - Create Post</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'bulletin_board/styles.css' %}">
+</head>
+<body>
+    <h1>Create Post</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="{% url 'post_list' %}" class="btn">Post list</a>
+
+</body>
+</html>
