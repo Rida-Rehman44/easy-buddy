@@ -14,7 +14,6 @@ from keys import map_api_key, weather_api_key
 import requests
 from google_auth_oauthlib.flow import Flow
 from .utils import get_calendar_events
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -111,8 +110,6 @@ def group_detail(request, group_id):
         group_calendar = None
         calendar_id = None
         events = None
-
-    # Handle POST request for submitting bulletin board message form
     if request.method == 'POST':
         form = BulletinBoardMessageForm(request.POST)
         if form.is_valid():
@@ -128,7 +125,6 @@ def group_detail(request, group_id):
             print(form.errors)
             messages.error(request, 'Failed to post bulletin board message. Please check the form inputs.')
     else:
-        # Initialize an empty form for displaying in the template
         form = BulletinBoardMessageForm()
     
     # Prepare context data to pass to the template
@@ -147,7 +143,6 @@ def group_detail(request, group_id):
         
     }
     
-    # Render the template with the context data
     return render(request, 'groups/group_detail.html', context)
 
 # @login_required
@@ -202,36 +197,143 @@ def group_detail(request, group_id):
 #     # Render the template with the context data
 #     return render(request, 'groups/group_detail.html', context)
 
-
+########Shoppinglist
 
 @login_required
-def create_shopping_checklist(request):
-    groups = Group.objects.filter(members = request.user)
-    if request.method == 'POST':
-        form = ChecklistForm(request.POST)
-        if form.is_valid():
-            checklist = form.save(commit=False)
-            checklist.user = request.user
-            checklist.save()
-            messages.success(request, 'Shopping checklist created successfully!')
-        return redirect('group_detail', group_id=checklist.group.id)
-    else:
-        form = ChecklistForm()
-    context = {
-        'form': form,
-        'groups': groups
+def create_shopping_checklist(LoginRequiredMixin, View):
+    formset_class = ShoppingItemFormSet  # Use the formset instead of single form
+    template_name = 'groups/create_shopping_checklist.html'
+
+    def get(self, request, group_id, *args, **kwargs):
+        formset = self.formset_class() 
+        group = Group.objects.get(id=group_id)
+        if group_id:
+            groups = Group.objects.filter(id=group_id)
+        else:
+            groups = Group.objects.filter(group__in=request.user.groups.all())
+        context = {
+        'group': group,
+        'formset': formset,
+        'groups': groups,
+        
     }
-    return render(request, 'groups/create_shopping_checklist.html', context)
+        return render(request, self.template_name, context)
+
+    def post(self, request, group_id, *args, **kwargs):
+        group = Group.objects.get(id=group_id)
+        groups = Group.objects.filter(members = request.user)
+        formset = self.formset_class(request.POST)
+        if formset.is_valid():
+            checklist = ShoppingChecklist.objects.create(user=request.user)
+            name = request.POST.get('name')
+            checklist.name = name
+            group_id = request.POST.get('group_id')
+            if group_id:
+                group = Group.objects.get(id=group_id)
+                checklist.group = group
+            checklist.save()
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.checklist = checklist
+                instance.save()
+
+            messages.success(request, 'Checklist created successfully')
+            return redirect(to='/shopping_checklist/')
+        
+        context = {
+        'formset': formset,
+        'groups': groups,
+        'group': group,
+    }
+
+        return render(request, self.template_name, context)
+
   
     
+    return render(request, 'groups/create_shopping_checklist.html', context)
+  
+# @login_required
+# def home_list_view(request, group_id):
+#     if group_id:
+#         shopping_checklists = ShoppingChecklist.objects.filter(
+#             Q(user=request.user) |
+#             Q(group_id=group_id)
+#         ).order_by('-date_time_created')
+#     else:
+#         shopping_checklists = ShoppingChecklist.objects.filter(
+#             user=request.user
+#         ).order_by('-date_time_created')
+
+#     group = Group.objects.get(pk=group_id) if group_id else None
+
+#     context = {
+#         'shopping_checklists': shopping_checklists,
+#         'group_id': group_id,
+#         'group': group,
+#     }
+
+#     return render(request, 'groups/home_list.html', context)
+
+# Adjust your URL patterns to ensure the 'home_list_view' can handle optional 'group_id'
+  
  
-@login_required
-def home_list_view(request):
-    
-    return render(request, 'groups/home_list.html' )  
+# @login_required
+# def home_list_view(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     if group_id:
+#         shopping_checklists = ShoppingChecklist.objects.filter(
+#             Q(user=request.user) |
+#             Q(event__in=Group.objects.filter(pk=group_id))
+#         ).order_by('-date_time_created').all()
+#     else:
+#         shopping_checklists = ShoppingChecklist.objects.filter(
+#             Q(user=request.user) |
+#             Q(event__in=Group.objects.filter(group__in=request.user.groups.all()))
+#         ).order_by('-date_time_created').all()
+#     context = {
+#         'shopping_checklists': shopping_checklists,
+#         'group': group,
+#     }
+
+#     return render(request, 'groups/home_list.html', context)
+
+class EditView(LoginRequiredMixin, View):
+    checklist_form_class = ChecklistForm
+    item_formset_class = ShoppingItemFormSet
+    template_name = 'groups/edit_checklist.html'
+
+    def get(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist_form = self.checklist_form_class(instance=checklist)
+        item_formset = self.item_formset_class(instance=checklist)
+
+        return render(request, self.template_name,
+                      {'checklist_form': checklist_form, 'item_formset': item_formset, 'checklist': checklist})
+
+    def post(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist_form = self.checklist_form_class(request.POST, instance=checklist)
+        item_formset = self.item_formset_class(request.POST, instance=checklist)
+        if checklist_form.is_valid() and item_formset.is_valid():
+            checklist_form.save()
+            item_formset.save()
+            return redirect('groups/shopping_checklist/')  # Redirect to home screen after editing
+        return render(request, self.template_name,
+                      {'checklist_form': checklist_form, 'item_formset': item_formset, 'checklist': checklist})
 
 
+class DeleteView(LoginRequiredMixin, View):
+    def get(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        return redirect('groups/shopping_checklist/')  # Redirect to home screen after editing
 
+
+    def post(self, request, checklist_id):
+        checklist = get_object_or_404(ShoppingChecklist, pk=checklist_id)
+        checklist.delete()
+        return redirect('groups/shopping_checklist/')  # Redirect to home screen after editing
+
+########BB
 
 def create_bulletin_board_message(request, group_id):
     group = Group.objects.get(id=group_id)
@@ -272,7 +374,7 @@ def bulletin_board_view(request, group_id):
 # New view functions added
 
 
-
+##########Scheduled board
 
 def list(request):
     all_artist = Artist.objects.all()
