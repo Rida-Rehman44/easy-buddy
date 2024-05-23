@@ -1,18 +1,99 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgb(166, 205, 134);
+            border: 5px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #000000;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        ul li a {
+            display: inline-block;
+            background-color: #ab4f1e; /* Slightly darker green */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        ul li a:hover {
+            background-color: #819861; /* Slightly darker on hover */
+        }
+
+        button {
+            background-color: #d5b16c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #c3a056;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, {{ request.user.username }}!</h1>
-    <h2>Your Groups</h2>
-    <ul>
-        {% for membership in user_memberships %}
-            <li><a href="{% url 'trip:trip_detail' trip_id=membership.pk %}">{{ membership.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'trip:search_trip' %}"><button>Search Trip</button></a>
-    <a href="{% url 'trip:create_trip' %}"><button>Create Trip</button></a>
-    <a href="{% url 'users:logout' %}"><button>logout</button></a>
+    <div class="container">
+        <h1>Hello {{ request.user.username }}!</h1>
+        <h2>Your Groups</h2>
+        <ul>
+            {% for membership in user_memberships %}
+                <li><a href="{% url 'trip:trip_detail' trip_id=membership.pk %}">{{ membership.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <div class="buttons">
+            <a href="{% url 'trip:search_trip' %}"><button>Search Trip</button></a>
+            <a href="{% url 'trip:create_trip' %}"><button>Create Trip</button></a>
+            <a href="{% url 'users:logout' %}"><button>Logout</button></a>
+        </div>
+    </div>
 </body>
 </html>
+{% endblock content %}
