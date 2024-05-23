@@ -1,19 +1,21 @@
 from django.urls import path
 from . import views
-from users.views import loginview, registerview, logoutview
+from users.views import loginview, registerview, logoutview, landingpage
 from django.contrib.auth import views as auth_views
 
 app_name = 'users'
 
 urlpatterns = [
+    
 
+    path('', landingpage, name='landingpage'),
     path('sign-in/', views.sign_in, name='sign_in'),
     path('sign-out/', views.sign_out, name='sign_out'),
     path('auth-receiver/', views.auth_receiver, name='auth_receiver'),
     #path('register/', views.register, name='register'),
 
     # calender changes
-    path('', loginview, name='user_login'),
+    path('login/', loginview, name='user_login'),
     path('register-user/', views.register, name='login'),
     path('register/', views.register, name='register'),
     path('account/password_change/done/',

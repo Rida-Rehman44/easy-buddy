@@ -10,6 +10,9 @@ from .forms import RegisterForm, UserAuthenticationForm
 
 #######normal user
 
+def landingpage(request):
+    return render(request, 'landing_page.html')
+
 
 def register(request):
     if request.method == 'POST':
