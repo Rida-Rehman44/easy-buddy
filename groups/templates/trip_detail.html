@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ trip.name }} - Trip Detail</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ trip.name }}</h1>
+    <p><strong>Location:</strong> {{ trip.destination }}</p>
+    <p><strong>Description:</strong> {{ trip.description }}</p>
+
+    <!-- Weather Information -->
+    <div id="weather">
+        <h2>Weather for {{ trip.destination }}</h2>
+        {% if weather_data %}
+            <p><strong>Temperature:</strong> {{ weather_data.temperature }}°C</p>
+            <p><strong>Condition:</strong> {{ weather_data.condition }}</p>
+            <p><strong>Humidity:</strong> {{ weather_data.humidity }}%</p>
+        {% else %}
+            <p>Weather data is not available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Calendar Section -->
+    <h2>{{ trip.name }} Calendar</h2>
+    <div id="calendar"></div>
+
+
+    <!-- My Calendars Button -->
+    <div>
+        <a href="{% url 'trip_calendar:calendar_home' %}">
+            <button type="button">My Calendars</button>
+        </a>
+    </div>
+
+    <!-- bulletin_board -->
+        <h3>{{ trip.name }} Bulletin Board </h3>
+
+        <div>
+        <a href="{% url 'create_post' %}">
+            <button type="button">Create Post</button>
+        </a>
+    </div>
+     <!-- Map Placeholder -->
+    <h2>{{ trip.name }} Shoppinglist</h2>
+        <div>
+        <a href="{% url 'list_home' %}?trip_id={{ trip.id }}">
+            <button type="button">Shopping List</button>
+        </a>
+    </div>
+
+    <!-- Map Placeholder -->
+    <h2>Map</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d19895.54385792908!2d6.976307199999999!3d51.440841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sde!4v1716304637250!5m2!1sde!2sde" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</body>
+</html>

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %} Create List Page {% endblock title%}
+{% block content %}
+    <div class="form-content my-3 p-3">
+		<div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-5">
+                        <div class="card-header justify-content-center">
+                        	<h3 class="font-weight-light my-4 text-center">Create Shopping Checklist</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {% if form.errors %}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <div id="form_errors">
+                                            {% for key, value in form.errors.items %}
+                                                <strong>{{ value }}</strong>
+                                            {% endfor %}
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-group mt-4 mb-0">
+                                    <label for="name">Name</label>
+                                    <input class="form-control" id="name" name="name">
+                                </div>
+                                {{ formset.management_form }}
+                                <div id="formset">
+                                    {% for form in formset %}
+                                        <div class="row gy-2 gx-3 align-items-center formset-row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="small mb-1">Quantity</label>
+                                                    {{ form.quantity }}
+                                                    {% if form.errors.quantity %}
+                                                        <div class="text-danger quantity-error">{{ form.errors.quantity }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1">Item Name</label>
+                                                    {{ form.item_name }}
+                                                    {% if form.errors.item_name %}
+                                                            <div class="text-danger item-name-error">{{ form.errors.item_name }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-1">
+                                                 <div class="form-group">
+                                                    <label class="small mb-1"></label>
+
+                                                    <button type="button" class="btn btn-danger remove-item">Remove</button>
+                                                 </div>
+
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="form-group mt-4 mb-0">
+
+                                    <button type="button" class="btn btn-dark" id="add-item">Add Item</button>
+                                </div>
+                                <datalist id="itemList">
+                                          <option value="Grill">
+                                          <option value="Umbrella">
+                                          <option value="Ski equipment">
+                                          <option value="Trekking shoes">
+                                          <option value="Coal">
+                                        </datalist>
+
+                                <div class="form-group mt-4 mb-0">
+                                    <label for="event">Select Event</label>
+                                    <select class="form-control" id="event" name="event_id">
+                                        {% for event in events %}
+                                            <option value="{{ event.id }}">{{ event.name }} - {{ event.id }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-4 mb-0">
+                                    <button type="submit" class="col-md-12 btn btn-dark">Create</button><br><br>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const removeButtons = document.querySelectorAll('.remove-item');
+    const quantityErrors = document.querySelectorAll('.quantity-error');
+    const itemNameErrors = document.querySelectorAll('.item-name-error');
+
+    setTimeout(function() {
+        quantityErrors.forEach(error => {
+            error.style.display = 'none';
+        });
+        itemNameErrors.forEach(error => {
+            error.style.display = 'none';
+        });
+    }, 3000); // Adjust the timeout duration as needed
+    // Check if there are more than 1 item initially
+    toggleRemoveButtons();
+
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const formRow = this.closest('.formset-row');
+            formRow.remove();
+            toggleRemoveButtons();
+            var totalForms = parseInt(document.getElementById('id_shoppingitem_set-TOTAL_FORMS').value);
+            totalForms -= 1;
+            document.getElementById('id_shoppingitem_set-TOTAL_FORMS').setAttribute('value', totalForms);
+        });
+    });
+
+
+    function toggleRemoveButtons() {
+        const removeButtons = document.querySelectorAll('.remove-item');
+
+        const formRows = document.querySelectorAll('.formset-row');
+        const displayRemoveButton = formRows.length > 1;
+        removeButtons.forEach(button => {
+            if (displayRemoveButton) {
+                button.removeAttribute('disabled');
+            } else {
+                button.setAttribute('disabled', 'disabled');
+            }
+        });
+    }
+    document.getElementById('add-item').addEventListener('click', function() {
+
+
+        const formset = document.getElementById('formset');
+        var totalForms = parseInt(document.getElementById('id_shoppingitem_set-TOTAL_FORMS').value);
+        const newForm = formset.firstElementChild.cloneNode(true);
+        const inputs = newForm.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.setAttribute('id', input.getAttribute('id').replace(`id_shoppingitem_set-0`, `id_shoppingitem_set-${totalForms}`));
+            input.setAttribute('name', input.getAttribute('name').replace(`shoppingitem_set-0`, `shoppingitem_set-${totalForms}`));
+            input.value = '';
+        });
+        totalForms += 1;
+        document.getElementById('id_shoppingitem_set-TOTAL_FORMS').setAttribute('value', totalForms);
+        formset.appendChild(newForm);
+        const removeButtons = document.querySelectorAll('.remove-item');
+
+        toggleRemoveButtons();
+
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const formRow = this.closest('.formset-row');
+                formRow.remove();
+                toggleRemoveButtons();
+            });
+        });
+
+    });
+});
+
+</script>
+{% endblock content %}

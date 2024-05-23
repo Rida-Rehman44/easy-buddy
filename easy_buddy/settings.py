@@ -45,6 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
     'schedule.apps.ScheduleConfig',
+    'shopping_checklist',
+    'events',
+    'groups'
+    
+    
     
 ]
 

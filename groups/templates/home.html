@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Hello, {{ request.user.username }}!</h1>
+    <h2>Your Groups</h2>
+    <ul>
+        {% for membership in user_memberships %}
+            <li><a href="{% url 'trip:trip_detail' trip_id=membership.pk %}">{{ membership.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'trip:search_trip' %}"><button>Search Trip</button></a>
+    <a href="{% url 'trip:create_trip' %}"><button>Create Trip</button></a>
+    <a href="{% url 'users:logout' %}"><button>logout</button></a>
+</body>
+</html>
