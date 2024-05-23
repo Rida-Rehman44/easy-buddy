@@ -31,9 +31,6 @@
     <!-- Calendar Section -->
     <h2>{{ trip.name }} Calendar</h2>
     <div id="calendar"></div>
-
-
-    <!-- My Calendars Button -->
     <div>
         <a href="{% url 'trip_calendar:calendar_home' %}">
             <button type="button">My Calendars</button>
@@ -48,6 +45,17 @@
             <button type="button">Create Post</button>
         </a>
     </div>
+
+    <!-- bulletin_board -->
+    <h3>{{ trip.name }} Artist Schedule </h3>
+
+    <div>
+        <a href="{% url 'artist_schedule:list_schedule' %}">
+    <button type="button">Check Schedule</button>
+    </a>
+    </div>
+
+
      <!-- Map Placeholder -->
     <h2>{{ trip.name }} Shoppinglist</h2>
         <div>

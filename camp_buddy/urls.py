@@ -13,6 +13,7 @@ urlpatterns = [
     path('weatherapi/', include('weatherapi.urls')),
     path('', include('trip_calendar.urls')),
     path('', include('shopping_checklist.urls')),
+    path('', include('artist_schedule.urls')),
 
 
 

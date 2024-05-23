@@ -4,13 +4,13 @@ from django.conf import settings
 
 def get_weather_data(lat, lon):
     api_key = settings.WEATHER_API_KEY
-    weather_url = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={api_key}&units=metric'
+    weather_url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q=Bulk'
 
     try:
         response = requests.get(weather_url)
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         weather_data = response.json()
-
+        print(weather_data)
         current_weather = {
             'temperature': weather_data['current']['temp'],
             'condition': weather_data['current']['weather'][0]['description'],

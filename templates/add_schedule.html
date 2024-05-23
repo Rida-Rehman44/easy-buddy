@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<style>
+   
+      .form-container {
+
+        display: grid;
+        grid-template-columns: auto;
+        gap: 10px;
+        justify-content: space-between;
+      }
+    
+      .form-group {
+        margin-bottom: 10px;
+        clear: both;
+      }
+
+      .btn-submit {
+        display: flex;
+        margin: 20px auto;
+        flex-wrap: wrap;
+        justify-content: left;
+        color: aquamarine;
+      }
+
+      .container {
+        -webkit-text-fill-color: aliceblue;
+      }
+      
+  </style>
+
+    
+<body>
+
+  <div class='container'>
+    <h2>Add your favorite Artists & Bands!</h2>
+
+
+<form action="" method='POST'>
+  {% csrf_token %} 
+
+
+<div class="form-group">
+    <label for="Day">Day:</label>
+    <input  class="form-control" type="datetime-local" id='day' name='day'>
+</div>
+
+<div class="form-group">
+    <label for="stage">Stage:</label>
+    <input class="form-control" type="number" id='stage' name='stage' min="1">
+</div>
+
+<div class="form-group">
+    <label for="hours">Hours:</label>
+    <input class="form-control" type="number" id='hours' name='hours' min="1">
+</div>
+
+<div class="form-group">
+    <label for="genre">Genre:</label>
+    <input class="form-control" type="text" id='genre' name='genre'>
+</div>
+
+<div class="form-group">
+    <label for="firstname">Firstname:</label>
+    <input class="form-control" type="text" id='firstname' name='firstname'>
+</div>
+
+<div class="form-group">
+    <label for="lastname">Lastname:</label>
+    <input class="form-control" type="text" id='lastname' name='lastname'>
+</div>
+
+<div class="btn-submit">
+  <button type="submit" class="btn btn-primary">submit</button>
+</div>
+
+
+</form>
+
+ 
+  <section>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="gradient"></div>
+          <h1 data-animate="bottom" class="title">Dua Lipa</h1>
+          <img class="hero" src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/cee8040b-a98f-469e-b106-66ab49a41c32" alt="dua lipa" loading="lazy" width="300px" height="auto"/>
+            </div>
+            <div data-animate="bottom" class="box overview">
+              <h1 style="align-self: center">Overview</h1>
+              <p>
+                Dua Lipa is a famous singer from the United Kingdom. She was born on
+                August 22, 1995, in London, England. Dua's love for music started
+                when she was a kid. She began singing and even created covers of
+                songs to share on the internet. Her first big hit was "New Rules,"
+                which became a worldwide sensation.
+              </p>
+            </div>
+            <div class="box-mobile" data-modal="dua-bio">
+              <h1 style="align-self: center">Overview</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="gradient"></div>
+          <h1 data-animate="bottom" class="title">Taylor Swift</h1>
+          <img
+            class="hero"
+            src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/956c1e41-3164-4141-bfdc-3cd3dcb09473"
+            alt="taylor swift" loading="lazy" width="300px" height="auto" />
+          <div class="box-container">
+            <div data-animate="bottom" class="box songs">
+              
+            </div>
+            <div class="box-mobile" data-modal="taylor-songs">
+              
+            </div>
+            <div data-animate="bottom" class="box overview">
+              <h1 style="align-self: center">Overview</h1>
+              <p>
+                Taylor Swift is a famous singer from the United States. She was born
+                on December 13, 1989, in Reading, Pennsylvania. When Taylor was a
+                young girl, she loved singing and writing songs. She started
+                performing at local events and fairs. Her family moved to Nashville,
+                Tennessee, which is a big city for country music, to help her music
+                career.
+              </p>
+              <button class="more-btn" data-modal="taylor-bio">
+                <ion-icon
+                  class="more-btn-icon"
+                  name="add-circle-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="box-mobile" data-modal="taylor-bio">
+              <h1 style="align-self: center">Overview</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="gradient"></div>
+          <h1 data-animate="bottom" class="title">Ed Sheeran</h1>
+          <img class="hero" src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/567bafa8-61d5-4c2f-82da-858061c7b706" alt="ed sheeran" loading="lazy" width="300px" height="auto"/>
+          <div class="box-container">
+            <div data-animate="bottom" class="box songs">
+          
+              <button class="more-btn" data-modal="ed-songs">
+                <ion-icon
+                  class="more-btn-icon"
+                  name="add-circle-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="box-mobile" data-modal="ed-songs">
+              
+            </div>
+            <div data-animate="bottom" class="box overview">
+              <h1 style="align-self: center">Overview</h1>
+              <p>
+                Ed Sheeran is a famous singer and songwriter from England. He was
+                born on February 17, 1991, in Hebden Bridge, West Yorkshire. Ed fell
+                in love with music at a young age and started singing in a church
+                choir when he was just four years old. When he was eleven, he got
+                his first guitar and learned to play it by himself. He started
+                writing songs and became really good at it. His mom and dad
+                supported his love for music.
+              </p>
+              <button class="more-btn" data-modal="ed-bio">
+                <ion-icon
+                  class="more-btn-icon"
+                  name="add-circle-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="box-mobile" data-modal="ed-bio">
+              <h1 style="align-self: center">Overview</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="gradient"></div>
+          <h1 data-animate="bottom" class="title">Katy Perry</h1>
+          <img class="hero" src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/60f7b623-087d-47c4-b091-10936fd2c16f" alt="katy perry" loading="lazy" width="270px" height="300px" />
+          <div class="box-container">
+            <div data-animate="bottom" class="box songs">
+              
+            </div>
+        
+            <div data-animate="bottom" class="box overview">
+              
+              <p>
+                Katy Perry is a famous singer and songwriter from the United States.
+                She was born on October 25, 1984, in Santa Barbara, California. Her
+                real name is Katheryn Elizabeth Hudson. Katy's love for music
+                started at a young age, and she began singing in church when she was
+                a child. She even released a Christian music album under her real
+                name before becoming Katy Perry.
+              </p>
+              <button class="more-btn" data-modal="katy-bio">
+                <ion-icon
+                  class="more-btn-icon"
+                  name="add-circle-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="box-mobile" data-modal="katy-bio">
+              <h1 style="align-self: center">Overview</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sidebars -->
+  
+
+  
+</div>
+
+
+{% endblock %}

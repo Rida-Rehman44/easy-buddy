@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from .models import Trip, Event
 from .forms import TripForm
 from weatherapi.views import get_weather_data
+from camp_buddy.settings import WEATHER_API_KEY
+import requests
 
 
 def index(request):
@@ -50,15 +52,28 @@ def join_trip(request, trip_id):
 def trip_detail(request, trip_id):
     trip = get_object_or_404(Trip, pk=trip_id)
     events = Event.objects.filter(trip=trip)
-    weather_data = None
+    api_key = WEATHER_API_KEY
+    weather_url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q=Bulk'
 
+    response = requests.get(weather_url)
+    response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+    weather_data = response.json()
+    print(weather_data)
+    current_weather = {
+            'temperature': weather_data['current']['temp_c'],
+            'condition': weather_data['current']['condition']['text'],
+            'humidity': weather_data['current']['humidity']
+        }
+
+    
+    print(weather_data)
     if trip.latitude and trip.longitude:
         weather_data = get_weather_data(trip.latitude, trip.longitude)
 
     # Pass trip, weather, and events data to the template
     return render(request, 'trip_detail.html', {
         'trip': trip,
-        'weather_data': weather_data,
+        'weather_data': current_weather,
         'events': events
     })
 ################Calender

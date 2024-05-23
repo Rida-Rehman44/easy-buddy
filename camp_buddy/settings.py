@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'rest_framework',
     'schedule',
+    'artist_schedule',
     'apimodule',
     'allauth',
     'allauth.account',
