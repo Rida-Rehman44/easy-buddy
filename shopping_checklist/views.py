@@ -58,7 +58,7 @@ class CreateView(LoginRequiredMixin, View):
                 instance.save()
 
             messages.success(request, 'Checklist created successfully')
-            return redirect('/list_home/')
+            return redirect(f'/list_home/?trip_id={trip_id}')
 
         trips = Trip.objects.filter(members=request.user)  # Ensure trips are available in case of invalid form
         return render(request, self.template_name, {'formset': formset, 'trips': trips})

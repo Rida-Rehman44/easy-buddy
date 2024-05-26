@@ -1,128 +1,199 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+
+{% block title %} {{ trip.name }} - Trip Detail {% endblock title %}
 
 {% block content %}
+<style>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ trip.name }} - Trip Detail</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
+        .content {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin: 0;
             padding: 20px;
-            background-color: #4a6741;
         }
 
         .container {
-            max-width: 800px;
-            margin: auto;
-            background:  rgb(166, 205, 134);
-            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden
         }
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
 
-        h2 {
-            color: #444;
-            border-bottom: 2px solid #d5b16c;
-            padding-bottom: 5px;
-        }
+    h1 {
+        color: #333333;
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
 
-        h3 {
-            color: #555;
-            margin-top: 20px;
-        }
+    p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
 
-        p {
-            color: #666;
-            line-height: 1.6;
-        }
+    h2 {
+        color: #444;
+        border-bottom: 2px solid #d5b16c;
+        padding-bottom: 5px;
+        margin-top: 20px;
+    }
 
-        button {
-            background-color: #d5b16c;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+    }
 
-        button:hover {
-            background-color: #c3a056;
-        }
+    ul li {
+        margin: 0 1px;
+    }
 
-        .buttons {
-            margin-top: 20px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+    button {
+        background-color: #d5b16c;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
 
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-            border: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>{{ trip.name }}</h1>
-        <p><strong>Location:</strong> {{ trip.destination }}</p>
-        <p><strong>Description:</strong> {{ trip.description }}</p>
+    button:hover {
+        background-color: #c3a056;
+    }
 
-        <!-- Weather Information -->
-        <div id="weather">
-            <h2>Weather for {{ trip.destination }}</h2>
-            {% if weather_data %}
-                <p><strong>Temperature:</strong> {{ weather_data.temperature }}°C</p>
-                <p><strong>Condition:</strong> {{ weather_data.condition }}</p>
-                <p><strong>Humidity:</strong> {{ weather_data.humidity }}%</p>
-            {% else %}
-                <p>Weather data is not available.</p>
-            {% endif %}
-        </div>
+    .weather-box {
+        background-color: #f4f4f9;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+        text-align: left;
+    }
 
-        <!-- Calendar Section -->
-        <h2>Your Trip Apps</h2>
-        <div id="calendar"></div>
-        <div class="buttons">
+    .weather-box h2 {
+        margin-top: 0;
+    }
+
+    .weather-info {
+        margin-bottom: 10px;
+    }
+
+    #map {
+        height: 400px;
+        width: 100%;
+        margin-top: 20px;
+        border: none;
+        border-radius: 5px;
+    }
+
+    #scrollToTopBtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #d5b16c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: none;
+    }
+
+    #scrollToTopBtn:hover {
+        background-color: #c3a056;
+    }
+</style>
+
+<div class="container">
+    <h1>{{ trip.name }}</h1>
+    <p><strong>Trip Details:</strong> {{ trip.description }}</p>
+    <p><strong>Destination:</strong> {{ trip.destination }}</p>
+
+    <!-- Weather Information -->
+    <div class="weather-box">
+        <h2>Weather for {{ trip.destination }}</h2>
+        {% if weather_data %}
+            <p class="weather-info"><strong>Temperature:</strong> {{ weather_data.temperature }}°C</p>
+            <p class="weather-info"><strong>Condition:</strong> {{ weather_data.condition }}</p>
+            <p class="weather-info"><strong>Humidity:</strong> {{ weather_data.humidity }}%</p>
+        {% else %}
+            <p class="weather-info">Weather data is not available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Calendar Section -->
+    <h2>Your Trip Apps</h2>
+    <ul>
+        <li>
             <a href="{% url 'trip_calendar:calendar_home' %}">
                 <button type="button">My Calendars</button>
             </a>
+        </li>
+        <li>
             <a href="{% url 'create_post' %}">
                 <button type="button">Create Post</button>
             </a>
+        </li>
+        <li>
+            <a href="{% url 'post_list' %}">
+                <button type="button">Post List</button>
+            </a>
+        </li>
+        <li>
             <a href="{% url 'artist_schedule:list_schedule' %}">
                 <button type="button">Check Schedule</button>
             </a>
+        </li>
+        <li>
             <a href="{% url 'list_home' %}?trip_id={{ trip.id }}">
                 <button type="button">Shopping List</button>
             </a>
-        </div>
+        </li>
+    </ul>
 
-        <!-- Map Placeholder -->
-        <h2>Map</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d19895.54385792908!2d6.976307199999999!3d51.440841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sde!4v1716304637250!5m2!1sde!2sde" id="map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-</body>
-</html>
+    <!-- Map Placeholder -->
+    <h2>Map</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d19895.54385792908!2d6.976307199999999!3d51.440841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sde!4v1716304637250!5m2!1sde!2sde" id="map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+</div>
+
+<!-- Scroll to Top button -->
+<button onclick="topFunction()" id="scrollToTopBtn" title="Go to top">Top</button>
+
+<script>
+    // JavaScript for scroll to top button
+    window.onscroll = function() {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
 {% endblock content %}

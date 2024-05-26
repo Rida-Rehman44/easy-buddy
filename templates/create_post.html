@@ -4,22 +4,165 @@
 {% block content %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulletin Board - Create Post</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'bulletin_board/styles.css' %}">
+    <style>
+
+
+        .content {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input[type="text"],
+        textarea,
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #531e1e;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #d5b16c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #c3a056;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #d5b16c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #c3a056;
+        }
+
+        #image-preview, #video-preview {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <h1>Create Post</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container">
+        <h1>Create Post</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
 
-    <a href="{% url 'post_list' %}" class="btn">Post list</a>
+        <img id="image-preview" alt="Image Preview">
+        <video id="video-preview" controls></video>
 
+        <a href="{% url 'post_list' %}" class="btn">Post list</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.querySelector('input[type="file"][name="image"]');
+            const videoInput = document.querySelector('input[type="file"][name="video"]');
+            const imagePreview = document.getElementById('image-preview');
+            const videoPreview = document.getElementById('video-preview');
+
+            imageInput.addEventListener('change', function() {
+                const file = imageInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
+
+            videoInput.addEventListener('change', function() {
+                const file = videoInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        videoPreview.src = e.target.result;
+                        videoPreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    videoPreview.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 {% endblock content %}

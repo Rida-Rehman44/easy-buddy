@@ -4,37 +4,147 @@
 {% block content %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulletin Board - Post List</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'bulletin_board/styles.css' %}">
+    <style>
+        .content {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+    .navbar {
+        background-color: #333;
+        overflow: hidden;
+    }
+
+    .navbar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 20px;
+        text-decoration: none;
+    }
+
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+
+        .container {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .post-item {
+            background-color: #f4f4f9;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .timestamp {
+            font-size: 0.9em;
+            color: #888888;
+        }
+
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        p {
+            font-size: 1em;
+            color: #333333;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #d5b16c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #c3a056;
+        }
+    </style>
 </head>
 <body>
-    <h1>Post List</h1>
-    <ul>
-        {% for post in posts %}
-            <li class="post-item">
-                <div class="post-info">
-                    <span class="post-title">{{ post.title }}</span>
-                    <span class="timestamp">{{ post.created_at }}</span>
-                </div>
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
-                {% endif %}
-                {% if post.video %}
-                    <video width="320" height="240" controls>
-                        <source src="{{ post.video.url }}" type="video/mp4" class="post-image">
-                        Your browser does not support the video tag.
-                    </video>
-                {% endif %}
-                <p>{{ post.content }}</p>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Post List</h1>
+        <ul>
+            {% for post in posts %}
+                <li class="post-item">
+                    <div class="post-info">
+                        <span class="post-title">{{ post.title }}</span>
+                        <span class="timestamp">{{ post.created_at }}</span>
+                    </div>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+                    {% endif %}
+                    {% if post.video %}
+                        <video width="320" height="240" controls class="post-image">
+                            <source src="{{ post.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% endif %}
+                    <p>{{ post.content }}</p>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <a href="{% url 'create_post' %}" class="btn">Create a new post</a>
-
+        <a href="{% url 'create_post' %}" class="btn">Create a new post</a>
+    </div>
 </body>
 </html>
 {% endblock content %}

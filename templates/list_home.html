@@ -1,85 +1,213 @@
 {% extends "base.html" %}
-{% block title %} Home Page {% endblock title%}
+{% block title %} Home Page {% endblock title %}
 {% block content %}
+    <script>
+         .content {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        text-align: center;
+    }
+
+    h1 {
+        color: #333333;
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
+
+    form {
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #444;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #d5b16c;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #c3a056;
+    }
+.btn-dark, .btn-primary, .btn-danger {
+    background-color: #6f42c1;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-dark:hover, .btn-primary:hover, .btn-danger:hover {
+    background-color: #5933a5;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-size: 1.5em;
+    color: #333;
+}
+
+.card-text {
+    color: #555;
+}
+
+.form-check-label {
+    color: #333;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.close {
+    color: #333;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 33.3333%;
+        max-width: 33.3333%;
+    }
+}
+
+    </script>
     <div class="jumbotron">
         {% if user.is_authenticated %}
-            <h1 class="display-4">Shopping Lists for {% if not event_id %}{{ user.profile.nick_name|default:user.first_name }}{% else %}Event{% endif %}</h1>
-            <a class="btn btn-dark btn-lg" href="{% url 'create_shopping_checklist' %}{% if event_id %}?event_id={{event_id}}{% endif %}" role="button">Create a new list</a>
+            <h1 class="display-4">Shopping Lists for Trip</h1>
+            <a class="btn btn-dark btn-lg mb-4" href="{% url 'create_shopping_checklist' %}{% if trip_id %}?trip_id={{ trip_id }}{% endif %}" role="button">Create a new list</a>
             <div class="row">
                 {% for checklist in shopping_checklists %}
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ checklist }}</h5>
-                            {% for item in checklist.shoppingitem_set.all %}
-                            <div class="row">
-
-                              <div class="col-4">
-                                    <p class="card-text">{{ item.item_name }}</p>
-                                </div>
-                                <div class="col-3">
-                                    <p class="card-text"><strong>Qty:</strong> {{ item.quantity }}</p>
-                                </div>
-                                <div class="col-1">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="bought{{ item.id }}" {% if item.bought %}checked{% endif %} disabled>
-                                        <label class="form-check-label" for="bought{{ item.id }}">Completed</label>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            <hr/>
-                            <a href="{% url 'edit_checklist' checklist.id %}" class="btn btn-primary">Edit</a>
-                            {% if request.user == checklist.user %}
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal{{ checklist.id }}">
-                                    Delete
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="confirmDeleteModal{{ checklist.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to delete this shopping list?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <form action="{% url 'delete_checklist' checklist.id %}" method="post" style="display: inline;">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ checklist }}</h5>
+                                {% for item in checklist.shoppingitem_set.all %}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p class="card-text">{{ item.item_name }}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="card-text"><strong>Qty:</strong> {{ item.quantity }}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="bought{{ item.id }}" {% if item.bought %}checked{% endif %} disabled>
+                                                <label class="form-check-label" for="bought{{ item.id }}">Completed</label>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endif %}
-                            <hr/>
+                                {% endfor %}
+                                <hr />
+                                <a href="{% url 'edit_checklist' checklist.id %}" class="btn btn-primary">Edit</a>
+                                {% if request.user == checklist.user %}
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal{{ checklist.id }}">
+                                        Delete
+                                    </button>
 
-                            <p class="card-text">Created By: {{ checklist.user.profile.nick_name|default:user.first_name }}</p>
-                            <p class="card-text">Event: {{ checklist.event.name }}</p>
-
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="confirmDeleteModal{{ checklist.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this shopping list?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <form action="{% url 'delete_checklist' checklist.id %}" method="post" style="display: inline;">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <hr />
+                                <p class="card-text">Created By: {{ checklist.user.profile.nick_name|default:user.first_name }}</p>
+                                <p class="card-text">Trip: {{ checklist.trip.name }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
         {% else %}
             <br><hr><a href="{% url 'login' %}" class="btn btn-dark">Sign in</a>
         {% endif %}
     </div>
+
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"  crossorigin="anonymous"></script>
-
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
 {% endblock content %}
