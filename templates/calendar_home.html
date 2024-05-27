@@ -95,7 +95,7 @@ i.fa {
         <h2>Einstellungen</h2>
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
           <a href="#">Profil</a>
-            <a href="{% url 'users:logout' %}">Ausloggen</a>
+            <a href="{% url 'users:logout' %}">Logout</a>
         </div>
              <div class="login d-flex py-3">
                 <div class="container">
@@ -111,13 +111,13 @@ i.fa {
                         </div>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="mycalendars-tab" data-toggle="tab" href="#mycalendars" role="tab" aria-controls="mycalendars" aria-selected="true">Meine Kalender</a>
+                                    <a class="nav-link active" id="mycalendars-tab" data-toggle="tab" href="#mycalendars" role="tab" aria-controls="mycalendars" aria-selected="true">My Calendar</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="editcalendar-tab" data-toggle="tab" href="#editcalendar" role="tab" aria-controls="editcalendar" aria-selected="false">Bearbeiten</a>
+                                    <a class="nav-link" id="editcalendar-tab" data-toggle="tab" href="#editcalendar" role="tab" aria-controls="editcalendar" aria-selected="false">Edit Calendar</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="createcalendar-tab" data-toggle="tab" href="#createcalendar" role="tab" aria-controls="createcalendar" aria-selected="false">Erstellen</a>
+                                    <a class="nav-link" id="createcalendar-tab" data-toggle="tab" href="#createcalendar" role="tab" aria-controls="createcalendar" aria-selected="false">Create Calendar</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
@@ -129,7 +129,7 @@ i.fa {
                                                 <li>
                                                     {{ calendar.name }}
                                                     {% if selected_calendar != calendar.calendar_id %}
-                                                        <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'trip_calendar:calendar_home' %}?selected_calendar={{calendar.calendar_id}}">Anzeigen</a>
+                                                        <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'trip_calendar:calendar_home' %}?selected_calendar={{calendar.calendar_id}}">select</a>
                                                     {% endif %}
                                                 </li>
                                             {% endfor %}
@@ -142,17 +142,17 @@ i.fa {
                                         {% csrf_token %}
                                         <div class="form-label-group">
                                             {% render_field event_createform.name class="form-control" id="id_name_event" %}
-                                            <label for="id_name_event">Name des Events:</label>
+                                            <label for="id_name_event">Name of Event:</label>
                                             {{ event_createform.name.errors }}
                                         </div>
                                             <div class="form-label-group">
                                             {% render_field event_createform.start_date class="form-control" type="datetime-local" %}
-                                            <label for="id_start_date">Beginn:</label>
+                                            <label for="id_start_date">Start:</label>
                                             {{ event_createform.start_date.errors }}
                                         </div>
                                             <div class="form-label-group">
                                             {% render_field event_createform.end_date class="form-control" type="datetime-local" %}
-                                            <label for="id_end_date">Ende:</label>
+                                            <label for="id_end_date">End:</label>
                                             {{ event_createform.end_date.errors }}
                                         </div>
                                             <div class="form-label-group">
@@ -160,7 +160,7 @@ i.fa {
                                             {{ event_createform.event_type.errors }}
                                         </div>
 
-                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Create</button>
                                         </form>
                                     {% endif %}
                                     </div>
@@ -181,33 +181,33 @@ i.fa {
                                         </div>
                                         <div class="form-label-group">
                                             {% render_field editform.visible_for class="form-control" %}
-                                            <label for="id_visible_for">Sichtbar für:</label>
+                                            <label for="id_visible_for">Visible for:</label>
                                             {{ editform.visible_for.errors }}
                                         </div>
                                         <div class="form-label-group">
                                             {% render_field editform.editable_by class="form-control" %}
-                                            <label for="id_editable_by">Bearbeitbar durch:</label>
+                                            <label for="id_editable_by">Editable by:</label>
                                             {{ editform.editable_by.errors }}
                                             {{ editform.errors }}
                                         </div>
-                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="edit">Änderung speichern</button>
-                                        <button class="btn btn-lg btn-danger btn-block btn-login text-uppercase font-weight-bold mb-2" type="button" data-toggle="modal" data-target="#deleteModal">Kalender löschen</button>
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="edit">save changes</button>
+                                        <button class="btn btn-lg btn-danger btn-block btn-login text-uppercase font-weight-bold mb-2" type="button" data-toggle="modal" data-target="#deleteModal">Delete Calendar</button>
                                         <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Löschen eines Kalenders</h5>
+                                                        <h5 class="modal-title">Delete Calendar</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Möchtest du den Kalender wirklich löschen?</p>
-                                                        <small>Alle damit verbundenen Events werden ebenfalls unwiderruflich gelöscht.</small>
+                                                        <p>Do you want to delete the Calendar</p>
+                                                        <small>All Events connected will be deleted</small>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Doch nicht</button>
-                                                        <button class="btn btn-danger" type="submit" name="action" value="delete">Weg damit!</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                                                        <button class="btn btn-danger" type="submit" name="action" value="delete">delete</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,20 +219,20 @@ i.fa {
                                         {% csrf_token %}
                                         <div class="form-label-group">
                                             {% render_field createform.name class="form-control" %}
-                                            <label for="id_owner">Name des Kalenders</label>
+                                            <label for="id_owner">Name od Calendar</label>
                                             {{ createform.name.errors }}
                                         </div>
                                         <div class="form-label-group">
                                             {% render_field createform.visible_for class="form-control" %}
-                                            <label for="id_visible_for">Sichtbar für:</label>
+                                            <label for="id_visible_for">Visible for:</label>
                                             {{ createform.visible_for.errors }}
                                         </div>
                                         <div class="form-label-group">
                                             {% render_field createform.editable_by class="form-control" %}
-                                            <label for="id_editable_by">Bearbeitbar durch:</label>
+                                            <label for="id_editable_by">Editable by:</label>
                                             {{ createform.editable_by.errors }}
                                         </div>
-                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create">Erstellen</button>
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create">Create</button>
                                     </form>
                                 </div>
                             </div>
@@ -250,7 +250,7 @@ i.fa {
                     {% csrf_token %}
                     {{ event_editform.event_id.as_hidden }}
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Event bearbeiten</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Event</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -258,17 +258,17 @@ i.fa {
                     <div class="modal-body">
                         <div class="form-label-group">
                             {% render_field event_editform.name class="form-control" id="id_name_edit_event" %}
-                            <label for="id_name_edit_event">Name des Events:</label>
+                            <label for="id_name_edit_event">Name of Event:</label>
                             {{ event_editform.name.errors }}
                         </div>
                         <div class="form-label-group">
                             {% render_field event_editform.start_date class="form-control" type="datetime-local" id="id_edit_start_date" %}
-                            <label for="id_edit_start_date">Beginn:</label>
+                            <label for="id_edit_start_date">Start:</label>
                             {{ event_editform.start_date.errors }}
                         </div>
                         <div class="form-label-group">
                             {% render_field event_editform.end_date class="form-control" type="datetime-local" id="id_edit_end_date" %}
-                            <label for="id_edit_end_date">Ende:</label>
+                            <label for="id_edit_end_date">End:</label>
                             {{ event_editform.end_date.errors }}
                         </div>
                         <div class="form-label-group">
@@ -276,8 +276,8 @@ i.fa {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-                        <button class="btn btn-primary" type="submit" name="action" value="edit_event">Änderung übernehmen</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                        <button class="btn btn-primary" type="submit" name="action" value="edit_event">save Changes</button>
                         </div>
 {{ calendars|json_script:"calendar_data" }}{{ events|json_script:"events" }}
 

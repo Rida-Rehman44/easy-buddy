@@ -17,8 +17,8 @@ class Calendar(models.Model):
 
 class Event(models.Model):
     TYPE_CHOICES = [
-        ('AR', 'Arbeit'),
-        ('FR', 'Freizeit'),
+        ('AR', 'Work'),
+        ('FR', 'Leisure'),
     ]
 
     event_id = models.AutoField(primary_key=True)

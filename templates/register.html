@@ -10,28 +10,28 @@
         <div class="container">
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h1 class="login-heading mb-4">MyCalendar App</h1>
-                <h3 class="login-heading mb-4">Registrieren</h3>
+              <h1 class="login-heading mb-4">Camp Buddy</h1>
+                <h3 class="login-heading mb-4">sign up</h3>
               <form method="post"> {% csrf_token %}
                 <div class="form-label-group">
                   {% render_field form.email class="form-control" %}
                   <!-- <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail Adresse" required autofocus>-->
-                  <label for="inputEmail">E-Mail Adresse</label>
+                  <label for="inputEmail">E-Mail</label>
                   {{ form.email.errors }}
                 </div>
                 <div class="form-label-group">
                   {% render_field form.password1 class="form-control" %}
                   <!-- <input type="password" id="inputPassword1" class="form-control" placeholder="Passwort" required>-->
-                  <label for="inputPassword1">Passwort</label>
+                  <label for="inputPassword1">Password</label>
                   {{ form.password1.errors }}
                 </div>
                   <div class="form-label-group">
                     {% render_field form.password2 class="form-control" %}
                   <!-- <input type="password" id="inputPassword2" class="form-control" placeholder="Bestätige Passwort" required>-->
-                  <label for="inputPassword2">Bestätige Passwort</label>
+                  <label for="inputPassword2">repeat Password</label>
                     {{ form.password2.errors }}
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Registrieren</button>
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">sign up</button>
               </form>
                 <p style="margin-top: 128px;">
                 <small>
